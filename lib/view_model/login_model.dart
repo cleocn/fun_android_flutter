@@ -1,6 +1,6 @@
-import 'package:fun_android/config/storage_manager.dart';
-import 'package:fun_android/provider/view_state_model.dart';
-import 'package:fun_android/service/wan_android_repository.dart';
+import '/config/storage_manager.dart';
+import '/provider/view_state_model.dart';
+import '/service/wan_android_repository.dart';
 
 import 'user_model.dart';
 
@@ -9,9 +9,9 @@ const String kLoginName = 'kLoginName';
 class LoginModel extends ViewStateModel {
   final UserModel userModel;
 
-  LoginModel(this.userModel) : assert(userModel != null);
+  LoginModel(this.userModel);
 
-  String getLoginName() {
+  String? getLoginName() {
     return StorageManager.sharedPreferences.getString(kLoginName);
   }
 
@@ -21,7 +21,7 @@ class LoginModel extends ViewStateModel {
       var user = await WanAndroidRepository.login(loginName, password);
       userModel.saveUser(user);
       StorageManager.sharedPreferences
-          .setString(kLoginName, userModel.user.username);
+          .setString(kLoginName, userModel.user!.username!);
       setIdle();
       return true;
     } catch (e, s) {

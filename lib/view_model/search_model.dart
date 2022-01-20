@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:fun_android/model/search.dart';
-import 'package:fun_android/provider/view_state_refresh_list_model.dart';
-import 'package:fun_android/provider/view_state_list_model.dart';
-import 'package:fun_android/service/wan_android_repository.dart';
+import '/model/search.dart';
+import '/provider/view_state_refresh_list_model.dart';
+import '/provider/view_state_list_model.dart';
+import '/service/wan_android_repository.dart';
 
 const String kLocalStorageSearch = 'kLocalStorageSearch';
 const String kSearchHotList = 'kSearchHotList';
@@ -15,7 +15,7 @@ const String kSearchHistory = 'kSearchHistory';
 
 class SearchHotKeyModel extends ViewStateListModel {
   @override
-  Future<List> loadData() async {
+  Future<List?> loadData() async {
     LocalStorage localStorage = LocalStorage(kLocalStorageSearch);
 //    localStorage.deleteItem(keySearchHotList);//测试没有缓存
     await localStorage.ready;
@@ -25,7 +25,7 @@ class SearchHotKeyModel extends ViewStateListModel {
 
     if (localList.isEmpty) {
       //缓存为空,需要同步加载网络数据
-      List netList = await WanAndroidRepository.fetchSearchHotKey();
+      List? netList = await (WanAndroidRepository.fetchSearchHotKey() as FutureOr<List<dynamic>?>);
       localStorage.setItem(kSearchHotList, netList);
       return netList;
     } else {
@@ -43,7 +43,7 @@ class SearchHotKeyModel extends ViewStateListModel {
   }
 
   shuffle(){
-    list.shuffle();
+    list!.shuffle();
     notifyListeners();
   }
 
@@ -54,7 +54,7 @@ class SearchHistoryModel extends ViewStateListModel<String> {
     debugPrint('clearHistory');
     var sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.remove(kSearchHistory);
-    list.clear();
+    list!.clear();
     setEmpty();
   }
 
@@ -76,16 +76,16 @@ class SearchHistoryModel extends ViewStateListModel<String> {
 }
 
 class SearchResultModel extends ViewStateRefreshListModel {
-  final String keyword;
-  final SearchHistoryModel searchHistoryModel;
+  final String? keyword;
+  final SearchHistoryModel? searchHistoryModel;
 
   SearchResultModel({this.keyword, this.searchHistoryModel});
 
   @override
-  Future<List> loadData({int pageNum}) async {
-    if (keyword.isEmpty) return [];
-    searchHistoryModel.addHistory(keyword);
-    return await WanAndroidRepository.fetchSearchResult(
-        key: keyword, pageNum: pageNum);
+  Future<List?> loadData({int? pageNum}) async {
+    if (keyword!.isEmpty) return [];
+    searchHistoryModel!.addHistory(keyword!);
+    return await (WanAndroidRepository.fetchSearchResult(
+        key: keyword, pageNum: pageNum) as FutureOr<List<dynamic>?>);
   }
 }

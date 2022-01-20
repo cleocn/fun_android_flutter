@@ -16,20 +16,20 @@ class Http extends BaseHttp {
 /// App相关 API
 class PgyerApiInterceptor extends InterceptorsWrapper {
   @override
-  onRequest(RequestOptions options) async {
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     options.queryParameters['_api_key'] = '00f25cece8e201753872c268b5832df9';
     options.queryParameters['appKey'] = '0f7026d9c95933c7d0553628605b6ea4';
     debugPrint('---api-request--->url--> ${options.baseUrl}${options.path}' +
         ' queryParameters: ${options.queryParameters}');
-    return options;
+    handler.next(options);
   }
 
   @override
-  onResponse(Response response) {
+  onResponse(Response response, ResponseInterceptorHandler handler) {
     ResponseData respData = ResponseData.fromJson(response.data);
     if (respData.success) {
       response.data = respData.data;
-      return http.resolve(response);
+      return handler.resolve(response);
     } else {
       throw NotSuccessException.fromRespData(respData);
     }
@@ -48,18 +48,18 @@ class ResponseData extends BaseResponseData {
 
 /// CheckApp更新接口
 class AppUpdateInfo {
-  String buildBuildVersion;
-  String forceUpdateVersion;
-  String forceUpdateVersionNo;
-  bool needForceUpdate;
-  String downloadURL;
-  bool buildHaveNewVersion;
-  String buildVersionNo;
-  String buildVersion;
-  String buildShortcutUrl;
-  String buildUpdateDescription;
+  String? buildBuildVersion;
+  String? forceUpdateVersion;
+  String? forceUpdateVersionNo;
+  bool? needForceUpdate;
+  String? downloadURL;
+  bool? buildHaveNewVersion;
+  String? buildVersionNo;
+  String? buildVersion;
+  String? buildShortcutUrl;
+  String? buildUpdateDescription;
 
-  static AppUpdateInfo fromMap(Map<String, dynamic> map) {
+  static AppUpdateInfo? fromMap(Map<String, dynamic>? map) {
     if (map == null) return null;
     AppUpdateInfo pgyerApiBean = AppUpdateInfo();
     pgyerApiBean.buildBuildVersion = map['buildBuildVersion'];

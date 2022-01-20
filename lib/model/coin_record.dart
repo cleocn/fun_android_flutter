@@ -1,14 +1,13 @@
 class CoinRecord {
-  int coinCount;
-  int date;
-  String desc;
-  int id;
-  int type;
-  int userId;
-  String userName;
+  int? coinCount;
+  int? date;
+  String? desc;
+  int? id;
+  int? type;
+  int? userId;
+  String? userName;
 
   static CoinRecord fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
     CoinRecord coinRecordBean = CoinRecord();
     coinRecordBean.coinCount = map['coinCount'];
     coinRecordBean.date = map['date'];

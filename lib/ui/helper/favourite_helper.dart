@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/ui/widget/favourite_animation.dart';
-import 'package:fun_android/view_model/favourite_model.dart';
-import 'package:fun_android/view_model/user_model.dart';
+import '/config/router_manger.dart';
+import '/model/article.dart';
+import '/ui/widget/favourite_animation.dart';
+import '/view_model/favourite_model.dart';
+import '/view_model/user_model.dart';
 import 'package:provider/provider.dart';
 
 import 'dialog_helper.dart';
@@ -17,20 +17,20 @@ import 'dialog_helper.dart';
 ///
 ///
 addFavourites(BuildContext context,
-    {Article article,
-    FavouriteModel model,
+    {required Article article,
+    required FavouriteModel model,
     Object tag: 'addFavourite',
     bool playAnim: true}) async {
   await model.collect(article);
   if (model.isError) {
-    if (model.viewStateError.isUnauthorized) {
+    if (model.viewStateError!.isUnauthorized) {
       if (await DialogHelper.showLoginDialog(context)) {
         var success = await Navigator.pushNamed(context, RouteName.login);
-        if (success ?? false) {
+        if (success as bool? ?? false) {
           //登录后,判断是否已经收藏
           if (!Provider.of<UserModel>(context, listen: false)
-              .user
-              .collectIds
+              .user!
+              .collectIds!
               .contains(article.id)) {
             addFavourites(context, article: article, model: model, tag: tag);
           }

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/config/resource_mananger.dart';
-import 'package:fun_android/ui/widget/bottom_clipper.dart';
-import 'package:fun_android/view_model/theme_model.dart';
+import '/config/resource_mananger.dart';
+import '/ui/widget/bottom_clipper.dart';
+import '/view_model/theme_model.dart';
 
 class LoginTopPanel extends StatelessWidget {
   @override
@@ -49,7 +49,7 @@ class LoginLogo extends StatelessWidget {
 }
 
 class LoginFormContainer extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
 
   LoginFormContainer({this.child});
 
@@ -76,8 +76,8 @@ class LoginFormContainer extends StatelessWidget {
 
 /// LoginPage 按钮样式封装
 class LoginButtonWidget extends StatelessWidget {
-  final Widget child;
-  final VoidCallback onPressed;
+  final Widget? child;
+  final VoidCallback? onPressed;
 
   LoginButtonWidget({this.child, this.onPressed});
 
@@ -92,7 +92,7 @@ class LoginButtonWidget extends StatelessWidget {
           disabledColor: color,
           borderRadius: BorderRadius.circular(110),
           pressedOpacity: 0.5,
-          child: child,
+          child: child!,
           onPressed: onPressed,
         ));
   }

@@ -1,12 +1,11 @@
 class SearchHotKey {
-  int id;
-  String link;
-  String name;
-  int order;
-  int visible;
+  int? id;
+  String? link;
+  String? name;
+  int? order;
+  int? visible;
 
   static SearchHotKey fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
 		SearchHotKey searchBean = SearchHotKey();
     searchBean.id = map['id'];
     searchBean.link = map['link'];

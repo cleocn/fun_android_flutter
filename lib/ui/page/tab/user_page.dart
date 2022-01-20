@@ -2,19 +2,19 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/ui/page/change_log_page.dart';
-import 'package:fun_android/ui/widget/app_bar.dart';
-import 'package:fun_android/view_model/coin_model.dart';
+import '/generated/l10n.dart';
+import '/ui/page/change_log_page.dart';
+import '/ui/widget/app_bar.dart';
+import '/view_model/coin_model.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/config/resource_mananger.dart';
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/ui/widget/bottom_clipper.dart';
-import 'package:fun_android/view_model/login_model.dart';
-import 'package:fun_android/view_model/theme_model.dart';
-import 'package:fun_android/view_model/user_model.dart';
+import '/config/resource_mananger.dart';
+import '/config/router_manger.dart';
+import '/provider/provider_widget.dart';
+import '/ui/widget/bottom_clipper.dart';
+import '/view_model/login_model.dart';
+import '/view_model/theme_model.dart';
+import '/view_model/user_model.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -45,7 +45,7 @@ class _UserPageState extends State<UserPage>
                   }
                   if (model.userModel.hasUser) {
                     return IconButton(
-                      tooltip: S.of(context).logout,
+                      tooltip: S.of(context)!.logout,
                       icon: Icon(Icons.exit_to_app),
                       onPressed: () {
                         model.logout();
@@ -112,11 +112,11 @@ class UserHeaderWidget extends StatelessWidget {
                           Column(children: <Widget>[
                             Text(
                                 model.hasUser
-                                    ? model.user.nickname
-                                    : S.of(context).toSignIn,
+                                    ? model.user!.nickname!
+                                    : S.of(context)!.toSignIn,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .title
+                                    .caption!
                                     .apply(color: Colors.white.withAlpha(200))),
                             SizedBox(
                               height: 10,
@@ -137,7 +137,7 @@ class UserCoin extends StatelessWidget {
           if (model.isBusy) {
             return AppBarIndicator(radius: 8);
           }
-          var textStyle = Theme.of(context).textTheme.body1.copyWith(
+          var textStyle = Theme.of(context).textTheme.bodyText1!.copyWith(
               color: Colors.white.withAlpha(200),
               decoration: TextDecoration.underline);
           return InkWell(
@@ -149,8 +149,8 @@ class UserCoin extends StatelessWidget {
                 }
               },
               child: model.isError
-                  ? Text(S.of(context).retry, style: textStyle)
-                  : Text('${S.of(context).coin}：${model.coin}',
+                  ? Text(S.of(context)!.retry, style: textStyle)
+                  : Text('${S.of(context)!.coin}：${model.coin}',
                       style: textStyle));
         });
   }
@@ -165,7 +165,7 @@ class UserListWidget extends StatelessWidget {
       child: SliverList(
         delegate: SliverChildListDelegate([
           ListTile(
-            title: Text(S.of(context).favourites),
+            title: Text(S.of(context)!.favourites),
             onTap: () {
               Navigator.of(context).pushNamed(RouteName.favouriteList);
             },
@@ -176,7 +176,7 @@ class UserListWidget extends StatelessWidget {
             trailing: Icon(Icons.chevron_right),
           ),
           ListTile(
-            title: Text(S.of(context).darkMode),
+            title: Text(S.of(context)!.darkMode),
             onTap: () {
               switchDarkMode(context);
             },
@@ -198,7 +198,7 @@ class UserListWidget extends StatelessWidget {
           ),
           SettingThemeWidget(),
           ListTile(
-            title: Text(S.of(context).setting),
+            title: Text(S.of(context)!.setting),
             onTap: () {
               Navigator.pushNamed(context, RouteName.setting);
             },
@@ -209,7 +209,7 @@ class UserListWidget extends StatelessWidget {
             trailing: Icon(Icons.chevron_right),
           ),
           ListTile(
-            title: Text(S.of(context).appUpdateCheckUpdate),
+            title: Text(S.of(context)!.appUpdateCheckUpdate),
             onTap: () {
               Navigator.push(
                 context,
@@ -251,7 +251,7 @@ class SettingThemeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(S.of(context).theme),
+      title: Text(S.of(context)!.theme),
       leading: Icon(
         Icons.color_lens,
         color: Theme.of(context).accentColor,

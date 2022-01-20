@@ -1,20 +1,20 @@
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/model/banner.dart';
-import 'package:fun_android/provider/view_state_refresh_list_model.dart';
-import 'package:fun_android/service/wan_android_repository.dart';
+import '/model/article.dart';
+import '/model/banner.dart';
+import '/provider/view_state_refresh_list_model.dart';
+import '/service/wan_android_repository.dart';
 
 import 'favourite_model.dart';
 
 class HomeModel extends ViewStateRefreshListModel {
-  List<Banner> _banners;
-  List<Article> _topArticles;
+  List<Banner>? _banners;
+  List<Article>? _topArticles;
 
-  List<Banner> get banners => _banners;
+  List<Banner>? get banners => _banners;
 
-  List<Article> get topArticles => _topArticles;
+  List<Article>? get topArticles => _topArticles;
 
   @override
-  Future<List> loadData({int pageNum}) async {
+  Future<List> loadData({int? pageNum}) async {
     List<Future> futures = [];
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
       futures.add(WanAndroidRepository.fetchBanners());
@@ -34,6 +34,6 @@ class HomeModel extends ViewStateRefreshListModel {
 
   @override
   onCompleted(List data) {
-    GlobalFavouriteStateModel.refresh(data);
+    GlobalFavouriteStateModel.refresh(data as List<Article>);
   }
 }

@@ -1,12 +1,12 @@
 class Banner {
-  String desc;
-  int id;
-  String imagePath;
-  int isVisible;
-  int order;
-  String title;
-  int type;
-  String url;
+  String? desc;
+  int? id;
+  String? imagePath;
+  int? isVisible;
+  int? order;
+  String? title;
+  int? type;
+  String? url;
 
   Banner.fromJsonMap(Map<String, dynamic> map)
       : desc = map["desc"],

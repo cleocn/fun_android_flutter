@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/generated/l10n.dart';
 
 /// 登录页面表单字段框封装类
 class LoginTextField extends StatefulWidget {
-  final String label;
-  final IconData icon;
+  final String? label;
+  final IconData? icon;
   final bool obscureText;
-  final TextEditingController controller;
-  final FormFieldValidator<String> validator;
-  final FocusNode focusNode;
-  final TextInputAction textInputAction;
-  final ValueChanged<String> onFieldSubmitted;
+  final TextEditingController? controller;
+  final FormFieldValidator<String>? validator;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onFieldSubmitted;
 
   LoginTextField({
     this.label,
@@ -29,10 +29,10 @@ class LoginTextField extends StatefulWidget {
 }
 
 class _LoginTextFieldState extends State<LoginTextField> {
-  TextEditingController controller;
+  TextEditingController? controller;
 
   /// 默认遮挡密码
-  ValueNotifier<bool> obscureNotifier;
+  ValueNotifier<bool>? obscureNotifier;
 
   @override
   void initState() {
@@ -43,10 +43,10 @@ class _LoginTextFieldState extends State<LoginTextField> {
 
   @override
   void dispose() {
-    obscureNotifier.dispose();
+    obscureNotifier!.dispose();
     // 默认没有传入controller,需要内部释放
     if (widget.controller == null) {
-      controller.dispose();
+      controller!.dispose();
     }
     super.dispose();
   }
@@ -57,15 +57,15 @@ class _LoginTextFieldState extends State<LoginTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: ValueListenableBuilder(
-        valueListenable: obscureNotifier,
-        builder: (context, value, child) => TextFormField(
+        valueListenable: obscureNotifier!,
+        builder: (context, dynamic value, child) => TextFormField(
           controller: controller,
           obscureText: value,
           validator: (text) {
             var validator = widget.validator ?? (_) => null;
-            return text.trim().length > 0
+            return text!.trim().length > 0
                 ? validator(text)
-                : S.of(context).fieldNotNull;
+                : S.of(context)!.fieldNotNull;
           },
           focusNode: widget.focusNode,
           textInputAction: widget.textInputAction,
@@ -87,11 +87,11 @@ class _LoginTextFieldState extends State<LoginTextField> {
 }
 
 class LoginTextFieldSuffixIcon extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
-  final ValueNotifier<bool> obscureNotifier;
+  final ValueNotifier<bool>? obscureNotifier;
 
-  final bool obscureText;
+  final bool? obscureText;
 
   LoginTextFieldSuffixIcon(
       {this.controller, this.obscureNotifier, this.obscureText});
@@ -105,15 +105,15 @@ class LoginTextFieldSuffixIcon extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Offstage(
-          offstage: !obscureText,
+          offstage: !obscureText!,
           child: InkWell(
             onTap: () {
 //              debugPrint('onTap');
-              obscureNotifier.value = !obscureNotifier.value;
+              obscureNotifier!.value = !obscureNotifier!.value;
             },
             child: ValueListenableBuilder(
-              valueListenable: obscureNotifier,
-              builder: (context, value, child) => Icon(
+              valueListenable: obscureNotifier!,
+              builder: (context, dynamic value, child) => Icon(
                 CupertinoIcons.eye,
                 size: 30,
                 color: value ? theme.hintColor : theme.accentColor,
@@ -128,7 +128,7 @@ class LoginTextFieldSuffixIcon extends StatelessWidget {
 }
 
 class LoginTextFieldClearIcon extends StatefulWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   LoginTextFieldClearIcon(this.controller);
 
@@ -138,13 +138,13 @@ class LoginTextFieldClearIcon extends StatefulWidget {
 }
 
 class _LoginTextFieldClearIconState extends State<LoginTextFieldClearIcon> {
-  ValueNotifier<bool> notifier;
+  late ValueNotifier<bool> notifier;
 
   @override
   void initState() {
-    notifier = ValueNotifier(widget.controller.text.isEmpty);
-    widget.controller.addListener(() {
-      if(mounted) notifier.value = widget.controller.text.isEmpty;
+    notifier = ValueNotifier(widget.controller!.text.isEmpty);
+    widget.controller!.addListener(() {
+      if(mounted) notifier.value = widget.controller!.text.isEmpty;
     });
     super.initState();
   }
@@ -167,8 +167,8 @@ class _LoginTextFieldClearIconState extends State<LoginTextFieldClearIcon> {
       },
       child: InkWell(
           onTap: () {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              widget.controller.clear();
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              widget.controller!.clear();
             });
           },
           child: Icon(CupertinoIcons.clear,

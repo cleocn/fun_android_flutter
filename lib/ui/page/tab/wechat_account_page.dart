@@ -3,18 +3,18 @@ import 'package:flutter/material.dart'
     hide DropdownButton, DropdownMenuItem, DropdownButtonHideUnderline;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/ui/helper/refresh_helper.dart';
-import 'package:fun_android/ui/widget/article_list_Item.dart';
-import 'package:fun_android/ui/widget/article_skeleton.dart';
-import 'package:fun_android/ui/widget/skeleton.dart';
-import 'package:fun_android/utils/status_bar_utils.dart';
-import 'package:fun_android/view_model/wechat_account_model.dart';
+import '/model/article.dart';
+import '/ui/helper/refresh_helper.dart';
+import '/ui/widget/article_list_Item.dart';
+import '/ui/widget/article_skeleton.dart';
+import '/ui/widget/skeleton.dart';
+import '/utils/status_bar_utils.dart';
+import '/view_model/wechat_account_model.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/model/tree.dart';
-import 'package:fun_android/provider/provider_widget.dart';
+import '/model/tree.dart';
+import '/provider/provider_widget.dart';
 
-import 'package:fun_android/provider/view_state_widget.dart';
+import '/provider/view_state_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'project_page.dart';
@@ -30,7 +30,7 @@ class _WechatAccountPageState extends State<WechatAccountPage>
   bool get wantKeepAlive => true;
 
   ValueNotifier<int> valueNotifier = ValueNotifier(0);
-  TabController tabController;
+  TabController? tabController;
 
   @override
   void dispose() {
@@ -51,24 +51,24 @@ class _WechatAccountPageState extends State<WechatAccountPage>
           builder: (context, model, child) {
             if (model.isBusy) {
               return ViewStateBusyWidget();
-            } else if (model.isError && model.list.isEmpty) {
+            } else if (model.isError && model.list!.isEmpty) {
               return ViewStateErrorWidget(error: model.viewStateError, onPressed: model.initData);
             }
 
-            List<Tree> treeList = model.list;
+            List<Tree>? treeList = model.list;
             var primaryColor = Theme.of(context).primaryColor;
 
             return ValueListenableProvider<int>.value(
               value: valueNotifier,
               child: DefaultTabController(
-                length: model.list.length,
+                length: model.list!.length,
                 initialIndex: valueNotifier.value,
                 child: Builder(
                   builder: (context) {
                     if (tabController == null) {
                       tabController = DefaultTabController.of(context);
-                      tabController.addListener(() {
-                        valueNotifier.value = tabController.index;
+                      tabController!.addListener(() {
+                        valueNotifier.value = tabController!.index;
                       });
                     }
                     return Scaffold(
@@ -83,7 +83,7 @@ class _WechatAccountPageState extends State<WechatAccountPage>
                               child: TabBar(
                                   isScrollable: true,
                                   tabs: List.generate(
-                                      treeList.length,
+                                      treeList!.length,
                                       (index) => Tab(
                                             text: treeList[index].name,
                                           ))),
@@ -107,7 +107,7 @@ class _WechatAccountPageState extends State<WechatAccountPage>
 
 /// 微信公众号 文章列表
 class WechatArticleList extends StatefulWidget {
-  final int id;
+  final int? id;
 
   WechatArticleList(this.id);
 
@@ -145,9 +145,9 @@ class _WechatArticleListState extends State<WechatArticleList>
             onLoading: model.loadMore,
             enablePullUp: true,
             child: ListView.builder(
-                itemCount: model.list.length,
+                itemCount: model.list!.length,
                 itemBuilder: (context, index) {
-                  Article item = model.list[index];
+                  Article item = model.list![index];
                   return ArticleItemWidget(item);
                 }));
       },

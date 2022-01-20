@@ -3,16 +3,16 @@ import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/generated/l10n.dart';
 
 import 'package:provider/provider.dart';
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/ui/widget/button_progress_indicator.dart';
-import 'package:fun_android/ui/widget/third_component.dart';
-import 'package:fun_android/view_model/login_model.dart';
+import '/config/router_manger.dart';
+import '/provider/provider_widget.dart';
+import '/ui/widget/button_progress_indicator.dart';
+import '/ui/widget/third_component.dart';
+import '/view_model/login_model.dart';
 
-import 'package:fun_android/ui/page/user/login_widget.dart';
+import '/ui/page/user/login_widget.dart';
 
 import 'login_field_widget.dart';
 
@@ -60,21 +60,21 @@ class _LoginPageState extends State<LoginPage> {
                           child: ProviderWidget<LoginModel>(
                         model: LoginModel(Provider.of(context)),
                         onModelReady: (model) {
-                          _nameController.text = model.getLoginName();
+                          _nameController.text = model.getLoginName() ?? "";
                         },
                         builder: (context, model, child) {
                           return Form(
                             onWillPop: () async {
                               return !model.isBusy;
                             },
-                            child: child,
+                            child: child!,
                           );
                         },
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               LoginTextField(
-                                label: S.of(context).userName,
+                                label: S.of(context)!.userName,
                                 icon: Icons.perm_identity,
                                 controller: _nameController,
                                 textInputAction: TextInputAction.next,
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               LoginTextField(
                                 controller: _passwordController,
-                                label: S.of(context).password,
+                                label: S.of(context)!.password,
                                 icon: Icons.lock_outline,
                                 obscureText: true,
                                 focusNode: _pwdFocus,
@@ -121,16 +121,16 @@ class LoginButton extends StatelessWidget {
       child: model.isBusy
           ? ButtonProgressIndicator()
           : Text(
-              S.of(context).signIn,
+              S.of(context)!.signIn,
               style: Theme.of(context)
                   .accentTextTheme
-                  .title
+                  .caption!
                   .copyWith(wordSpacing: 6),
             ),
       onPressed: model.isBusy
           ? null
           : () {
-              var formState = Form.of(context);
+              var formState = Form.of(context)!;
               if (formState.validate()) {
                 model
                     .login(nameController.text, passwordController.text)
@@ -157,7 +157,7 @@ class SingUpWidget extends StatefulWidget {
 }
 
 class _SingUpWidgetState extends State<SingUpWidget> {
-  TapGestureRecognizer _recognizerRegister;
+  TapGestureRecognizer? _recognizerRegister;
 
   @override
   void initState() {
@@ -172,16 +172,16 @@ class _SingUpWidgetState extends State<SingUpWidget> {
 
   @override
   void dispose() {
-    _recognizerRegister.dispose();
+    _recognizerRegister!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text.rich(TextSpan(text: S.of(context).noAccount, children: [
+      child: Text.rich(TextSpan(text: S.of(context)!.noAccount, children: [
         TextSpan(
-            text: S.of(context).toSignUp,
+            text: S.of(context)!.toSignUp,
             recognizer: _recognizerRegister,
             style: TextStyle(color: Theme.of(context).accentColor))
       ])),

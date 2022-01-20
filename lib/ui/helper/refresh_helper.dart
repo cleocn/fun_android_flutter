@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/ui/page/tab/home_second_floor_page.dart';
-import 'package:fun_android/ui/widget/activity_indicator.dart';
+import '/generated/l10n.dart';
+import '/ui/page/tab/home_second_floor_page.dart';
+import '/ui/widget/activity_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 /// 首页列表的header
@@ -12,7 +12,7 @@ class HomeRefreshHeader extends StatelessWidget {
     var strings = RefreshLocalizations.of(context)?.currentLocalization ??
         EnRefreshString();
     return ClassicHeader(
-      canTwoLevelText: S.of(context).refreshTwoLevel,
+      canTwoLevelText: S.of(context)!.refreshTwoLevel,
       textStyle: TextStyle(color: Colors.white),
       outerBuilder: (child) => HomeSecondFloorOuter(child),
       twoLevelView: Container(),

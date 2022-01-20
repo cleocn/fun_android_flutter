@@ -4,10 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/ui/widget/app_update.dart';
-import 'package:fun_android/utils/platform_utils.dart';
+import '/generated/l10n.dart';
+import '/provider/view_state_widget.dart';
+import '/ui/widget/app_update.dart';
+import '/utils/platform_utils.dart';
 import 'package:package_info/package_info.dart';
 
 class ChangeLogPage extends StatefulWidget {
@@ -16,7 +16,7 @@ class ChangeLogPage extends StatefulWidget {
 }
 
 class _ChangeLogPageState extends State<ChangeLogPage> {
-  ValueNotifier versionNotifier;
+  late ValueNotifier versionNotifier;
 
   @override
   void initState() {
@@ -33,8 +33,8 @@ class _ChangeLogPageState extends State<ChangeLogPage> {
       appBar: AppBar(
         title: ValueListenableBuilder(
             valueListenable: versionNotifier,
-            builder: (ctx, value, child) =>
-                Text(S.of(context).appUpdateCheckUpdate + ' v$value')),
+            builder: (ctx, dynamic value, child) =>
+                Text(S.of(context)!.appUpdateCheckUpdate + ' v$value')),
       ),
       body: SafeArea(
         child: Stack(children: <Widget>[
@@ -49,7 +49,7 @@ class _ChangeLogPageState extends State<ChangeLogPage> {
             child: Platform.isIOS
                 ? CupertinoButton(
                     color: Theme.of(context).accentColor,
-                    child: Text(S.of(context).close),
+                    child: Text(S.of(context)!.close),
                     onPressed: () {
                       Navigator.pop(context);
                     })
@@ -67,7 +67,7 @@ class ChangeLogView extends StatefulWidget {
 }
 
 class _ChangeLogViewState extends State<ChangeLogView> {
-  String _changelog;
+  String? _changelog;
 
   @override
   void initState() {
@@ -84,6 +84,6 @@ class _ChangeLogViewState extends State<ChangeLogView> {
     if (_changelog == null) {
       return ViewStateBusyWidget();
     }
-    return Markdown(data: _changelog);
+    return Markdown(data: _changelog!);
   }
 }

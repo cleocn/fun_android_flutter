@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_android/config/resource_mananger.dart';
+import '/config/resource_mananger.dart';
 
 enum ImageType {
   normal,
@@ -9,23 +9,23 @@ enum ImageType {
 }
 
 class WrapperImage extends StatelessWidget {
-  final String url;
+  final String? url;
   final double width;
   final double height;
   final BoxFit fit;
   final ImageType imageType;
 
   WrapperImage(
-      {@required this.url,
-      @required this.width,
-      @required this.height,
+      {required this.url,
+      required this.width,
+      required this.height,
       this.imageType: ImageType.normal,
       this.fit: BoxFit.cover});
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: imageUrl,
+      imageUrl: imageUrl!,
       width: width,
       height: height,
       placeholder: (_, __) =>
@@ -36,13 +36,13 @@ class WrapperImage extends StatelessWidget {
     );
   }
 
-  String get imageUrl {
+  String? get imageUrl {
     switch (imageType) {
       case ImageType.random:
         return ImageHelper.randomUrl(
             key: url, width: width.toInt(), height: height.toInt());
       case ImageType.assets:
-        return ImageHelper.wrapAssets(url);
+        return ImageHelper.wrapAssets(url!);
       case ImageType.normal:
         return url;
     }

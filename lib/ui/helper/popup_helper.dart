@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 /// 待完成替换现有tabBar展开
 
 Future showPopup({
-  @required BuildContext context,
+  required BuildContext context,
 //  @required RelativeRect position,
-  @required Widget child,
+  required Widget child,
 }) {
   assert(context != null);
 //  assert(position != null);
@@ -21,18 +21,18 @@ class PopupWindowRoute extends PopupRoute {
   final BuildContext target;
 
   PopupWindowRoute({
-    @required this.child,
-    @required this.target,
+    required this.child,
+    required this.target,
   });
 
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
   bool get barrierDismissible => true;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   Duration get transitionDuration => _duration;
@@ -49,8 +49,8 @@ class PopupWindowRoute extends PopupRoute {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    final RenderBox button = target.findRenderObject();
-    final RenderBox overlay = Overlay.of(target).context.findRenderObject();
+    final RenderBox button = target.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(target)!.context.findRenderObject() as RenderBox;
     final RelativeRect position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
@@ -136,7 +136,7 @@ class PopupMenuRouteLayout extends SingleChildLayoutDelegate {
   // The distance from the top of the menu to the middle of selected item.
   //
   // This will be null if there's no item to position in this way.
-  final double selectedItemOffset;
+  final double? selectedItemOffset;
 
   // Whether to prefer going to the left or to the right.
   final TextDirection textDirection;
@@ -150,7 +150,7 @@ class PopupMenuRouteLayout extends SingleChildLayoutDelegate {
     // The menu can be at most the size of the overlay minus 8.0 pixels in each
     // direction.
     return BoxConstraints.loose(constraints.biggest -
-        const Offset(_kMenuScreenPadding * 2.0, _kMenuScreenPadding * 2.0));
+        const Offset(_kMenuScreenPadding * 2.0, _kMenuScreenPadding * 2.0) as Size);
   }
 
   @override
@@ -166,11 +166,11 @@ class PopupMenuRouteLayout extends SingleChildLayoutDelegate {
     } else {
       y = position.top +
           (size.height - position.top - position.bottom) / 2.0 -
-          selectedItemOffset;
+          selectedItemOffset!;
     }
 
     // Find the ideal horizontal position.
-    double x;
+    late double x;
     if (position.left > position.right) {
       // Menu button is closer to the right edge, so grow to the left, aligned to the right edge.
       x = size.width - position.right - childSize.width;

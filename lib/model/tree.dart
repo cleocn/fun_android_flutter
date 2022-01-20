@@ -1,14 +1,14 @@
-import 'package:fun_android/utils/string_utils.dart';
+import '/utils/string_utils.dart';
 
 class Tree {
   List<Tree> children;
-  int courseId;
-  int id;
-  String name;
-  int order;
-  int parentChapterId;
-  bool userControlSetTop;
-  int visible;
+  int? courseId;
+  int? id;
+  String? name;
+  int? order;
+  int? parentChapterId;
+  bool? userControlSetTop;
+  int? visible;
 
   Tree.fromJsonMap(Map<String, dynamic> map)
       : children =

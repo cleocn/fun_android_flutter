@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/config/storage_manager.dart';
+import '/config/storage_manager.dart';
 
 /// 使用原生WebView
 const String kUseWebViewPlugin = 'kUseWebViewPlugin';

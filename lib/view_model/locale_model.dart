@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fun_android/config/storage_manager.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/config/storage_manager.dart';
+import '/generated/l10n.dart';
 
 class LocaleModel extends ChangeNotifier {
 //  static const localeNameList = ['auto', '中文', 'English'];
@@ -9,13 +9,13 @@ class LocaleModel extends ChangeNotifier {
   //
   static const kLocaleIndex = 'kLocaleIndex';
 
-  int _localeIndex;
+  int? _localeIndex;
 
-  int get localeIndex => _localeIndex;
+  int? get localeIndex => _localeIndex;
 
-  Locale get locale {
-    if (_localeIndex > 0) {
-      var value = localeValueList[_localeIndex].split("-");
+  Locale? get locale {
+    if (_localeIndex! > 0) {
+      var value = localeValueList[_localeIndex!].split("-");
       return Locale(value[0], value.length == 2 ? value[1] : '');
     }
     // 跟随系统
@@ -35,7 +35,7 @@ class LocaleModel extends ChangeNotifier {
   static String localeName(index, context) {
     switch (index) {
       case 0:
-        return S.of(context).autoBySystem;
+        return S.of(context)!.autoBySystem;
       case 1:
         return '中文';
       case 2:

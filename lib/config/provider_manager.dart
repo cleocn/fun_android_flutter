@@ -1,8 +1,8 @@
-import 'package:fun_android/view_model/favourite_model.dart';
-import 'package:fun_android/view_model/locale_model.dart';
+import '/view_model/favourite_model.dart';
+import '/view_model/locale_model.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/view_model/theme_model.dart';
-import 'package:fun_android/view_model/user_model.dart';
+import '/view_model/theme_model.dart';
+import '/view_model/user_model.dart';
 import 'package:provider/single_child_widget.dart';
 
 List<SingleChildWidget> providers = [
@@ -29,10 +29,11 @@ List<SingleChildWidget> independentServices = [
 /// UserModel依赖globalFavouriteStateModel
 List<SingleChildWidget> dependentServices = [
   ChangeNotifierProxyProvider<GlobalFavouriteStateModel, UserModel>(
-    create: null,
+    create: (_) =>
+      UserModel(GlobalFavouriteStateModel()),
     update: (context, globalFavouriteStateModel, userModel) =>
     userModel ??
-        UserModel(globalFavouriteStateModel: globalFavouriteStateModel),
+        UserModel(globalFavouriteStateModel),
   )
 ];
 

@@ -1,7 +1,7 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class ThirdAppUtils {
-  static Future<String> canOpenApp(url) async {
+  static Future<String?> canOpenApp(url) async {
     Uri uri = Uri.parse(url);
     var scheme;
     switch (uri.host) {

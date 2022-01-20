@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ArticleTag extends StatelessWidget {
   final String text;
-  final Color color;
+  final Color? color;
 
   ArticleTag(this.text, {this.color});
 

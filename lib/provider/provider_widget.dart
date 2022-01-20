@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 class ProviderWidget<T extends ChangeNotifier> extends StatefulWidget {
   final ValueWidgetBuilder<T> builder;
   final T model;
-  final Widget child;
-  final Function(T model) onModelReady;
+  final Widget? child;
+  final Function(T model)? onModelReady;
   final bool autoDispose;
 
   ProviderWidget({
-    Key key,
-    @required this.builder,
-    @required this.model,
+    Key? key,
+    required this.builder,
+    required this.model,
     this.child,
     this.onModelReady,
     this.autoDispose: true,
@@ -25,7 +25,7 @@ class ProviderWidget<T extends ChangeNotifier> extends StatefulWidget {
 
 class _ProviderWidgetState<T extends ChangeNotifier>
     extends State<ProviderWidget<T>> {
-  T model;
+  late T model;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _ProviderWidgetState<T extends ChangeNotifier>
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<T>.value(
+    return ChangeNotifierProvider<T?>.value(
       value: model,
       child: Consumer<T>(
         builder: widget.builder,
@@ -52,21 +52,21 @@ class _ProviderWidgetState<T extends ChangeNotifier>
   }
 }
 
-class ProviderWidget2<A extends ChangeNotifier, B extends ChangeNotifier>
+class ProviderWidget2<A extends ChangeNotifier?, B extends ChangeNotifier?>
     extends StatefulWidget {
-  final Widget Function(BuildContext context, A model1, B model2, Widget child)
+  final Widget Function(BuildContext context, A model1, B model2, Widget? child)
       builder;
   final A model1;
   final B model2;
-  final Widget child;
-  final Function(A model1, B model2) onModelReady;
-  final bool autoDispose;
+  final Widget? child;
+  final Function(A model1, B model2)? onModelReady;
+  final bool? autoDispose;
 
   ProviderWidget2({
-    Key key,
-    @required this.builder,
-    @required this.model1,
-    @required this.model2,
+    Key? key,
+    required this.builder,
+    required this.model1,
+    required this.model2,
     this.child,
     this.onModelReady,
     this.autoDispose,
@@ -75,10 +75,10 @@ class ProviderWidget2<A extends ChangeNotifier, B extends ChangeNotifier>
   _ProviderWidgetState2<A, B> createState() => _ProviderWidgetState2<A, B>();
 }
 
-class _ProviderWidgetState2<A extends ChangeNotifier, B extends ChangeNotifier>
-    extends State<ProviderWidget2<A, B>> {
-  A model1;
-  B model2;
+class _ProviderWidgetState2<A extends ChangeNotifier?, B extends ChangeNotifier?>
+    extends State<ProviderWidget2<A?, B?>> {
+  A? model1;
+  B? model2;
 
   @override
   void initState() {
@@ -90,9 +90,9 @@ class _ProviderWidgetState2<A extends ChangeNotifier, B extends ChangeNotifier>
 
   @override
   void dispose() {
-    if (widget.autoDispose) {
-      model1.dispose();
-      model2.dispose();
+    if (widget.autoDispose!) {
+      model1!.dispose();
+      model2!.dispose();
     }
     super.dispose();
   }
@@ -101,8 +101,8 @@ class _ProviderWidgetState2<A extends ChangeNotifier, B extends ChangeNotifier>
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<A>.value(value: model1),
-          ChangeNotifierProvider<B>.value(value: model2),
+          ChangeNotifierProvider<A?>.value(value: model1),
+          ChangeNotifierProvider<B?>.value(value: model2),
         ],
         child: Consumer2<A, B>(
           builder: widget.builder,

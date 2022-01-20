@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+// import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/config/resource_mananger.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/config/router_manger.dart';
+import '/config/resource_mananger.dart';
+import '/generated/l10n.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -14,9 +15,9 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
-  AnimationController _logoController;
-  Animation<double> _animation;
-  AnimationController _countdownController;
+  late AnimationController _logoController;
+  late Animation<double> _animation;
+  late AnimationController _countdownController;
 
   @override
   void initState() {
@@ -109,7 +110,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 class AnimatedCountdown extends AnimatedWidget {
   final Animation<int> animation;
 
-  AnimatedCountdown({key, this.animation, context})
+  AnimatedCountdown({key, required this.animation, context})
       : super(key: key, listenable: animation) {
     this.animation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -122,7 +123,7 @@ class AnimatedCountdown extends AnimatedWidget {
   Widget build(BuildContext context) {
     var value = animation.value + 1;
     return Text(
-      (value == 0 ? '' : '$value | ') + S.of(context).splashSkip,
+      (value == 0 ? '' : '$value | ') + S.of(context)!.splashSkip,
       style: TextStyle(color: Colors.white),
     );
   }
@@ -130,13 +131,13 @@ class AnimatedCountdown extends AnimatedWidget {
 
 class AnimatedFlutterLogo extends AnimatedWidget {
   AnimatedFlutterLogo({
-    Key key,
-    Animation<double> animation,
+    Key? key,
+    required Animation<double> animation,
   }) : super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation = listenable;
+    final Animation<double> animation = listenable as Animation<double>;
     return AnimatedAlign(
       duration: Duration(milliseconds: 10),
       alignment: Alignment(0, 0.2 + animation.value * 0.3),
@@ -152,13 +153,13 @@ class AnimatedFlutterLogo extends AnimatedWidget {
 
 class AnimatedAndroidLogo extends AnimatedWidget {
   AnimatedAndroidLogo({
-    Key key,
-    Animation<double> animation,
+    Key? key,
+    required Animation<double> animation,
   }) : super(key: key, listenable: animation);
 
   @override
   Widget build(BuildContext context) {
-    final Animation<double> animation = listenable;
+    final Animation<double> animation = listenable as Animation<double>;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[

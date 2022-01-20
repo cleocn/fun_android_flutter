@@ -8,9 +8,9 @@ class FavouriteAnimationWidget extends StatefulWidget {
   final Object tag;
 
   /// true 添加到收藏,false从收藏移除
-  final bool add;
+  final bool? add;
 
-  FavouriteAnimationWidget({@required this.tag, @required this.add});
+  FavouriteAnimationWidget({required this.tag, required this.add});
 
   @override
   _FavouriteAnimationWidgetState createState() =>
@@ -22,7 +22,7 @@ class _FavouriteAnimationWidgetState extends State<FavouriteAnimationWidget> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() {
         playing = true;
       });
@@ -38,7 +38,7 @@ class _FavouriteAnimationWidgetState extends State<FavouriteAnimationWidget> {
         "assets/animations/like.flr",
         alignment: Alignment.center,
         fit: BoxFit.contain,
-        animation: widget.add ? 'like' : 'unLike',
+        animation: widget.add! ? 'like' : 'unLike',
         shouldClip: false,
         isPaused: !playing,
         callback: (name) {
@@ -54,7 +54,7 @@ class _FavouriteAnimationWidgetState extends State<FavouriteAnimationWidget> {
 class HeroDialogRoute<T> extends PageRoute<T> {
   HeroDialogRoute({this.builder}) : super();
 
-  final WidgetBuilder builder;
+  final WidgetBuilder? builder;
 
   @override
   bool get opaque => false;
@@ -82,9 +82,9 @@ class HeroDialogRoute<T> extends PageRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return builder(context);
+    return builder!(context);
   }
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 }

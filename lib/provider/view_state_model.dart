@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_android/config/net/api.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/config/net/api.dart';
+import '/generated/l10n.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'view_state.dart';
@@ -21,7 +21,7 @@ class ViewStateModel with ChangeNotifier {
   ///
   /// 子类可以在构造函数指定需要的页面状态
   /// FooModel():super(viewState:ViewState.busy);
-  ViewStateModel({ViewState viewState})
+  ViewStateModel({ViewState? viewState})
       : _viewState = viewState ?? ViewState.idle {
     // debugPrint('ViewStateModel---constructor--->$runtimeType');
   }
@@ -36,9 +36,9 @@ class ViewStateModel with ChangeNotifier {
   }
 
   /// ViewStateError
-  ViewStateError _viewStateError;
+  ViewStateError? _viewStateError;
 
-  ViewStateError get viewStateError => _viewStateError;
+  ViewStateError? get viewStateError => _viewStateError;
 
   /// 以下变量是为了代码书写方便,加入的get方法.严格意义上讲,并不严谨
   ///
@@ -65,21 +65,21 @@ class ViewStateModel with ChangeNotifier {
   }
 
   /// [e]分类Error和Exception两种
-  void setError(e, stackTrace, {String message}) {
+  void setError(e, stackTrace, {String? message}) {
     ViewStateErrorType errorType = ViewStateErrorType.defaultError;
 
     /// 见https://github.com/flutterchina/dio/blob/master/README-ZH.md#dioerrortype
     if (e is DioError) {
-      if (e.type == DioErrorType.CONNECT_TIMEOUT ||
-          e.type == DioErrorType.SEND_TIMEOUT ||
-          e.type == DioErrorType.RECEIVE_TIMEOUT) {
+      if (e.type == DioErrorType.connectTimeout ||
+          e.type == DioErrorType.sendTimeout ||
+          e.type == DioErrorType.receiveTimeout) {
         // timeout
         errorType = ViewStateErrorType.networkTimeOutError;
         message = e.error;
-      } else if (e.type == DioErrorType.RESPONSE) {
+      } else if (e.type == DioErrorType.response) {
         // incorrect status, such as 404, 503...
         message = e.error;
-      } else if (e.type == DioErrorType.CANCEL) {
+      } else if (e.type == DioErrorType.cancel) {
         // to be continue...
         message = e.error;
       } else {
@@ -109,18 +109,18 @@ class ViewStateModel with ChangeNotifier {
     onError(viewStateError);
   }
 
-  void onError(ViewStateError viewStateError) {}
+  void onError(ViewStateError? viewStateError) {}
 
   /// 显示错误消息
-  showErrorMessage(context, {String message}) {
+  showErrorMessage(context, {String? message}) {
     if (viewStateError != null || message != null) {
-      if (viewStateError.isNetworkTimeOut) {
-        message ??= S.of(context).viewStateMessageNetworkError;
+      if (viewStateError!.isNetworkTimeOut) {
+        message ??= S.of(context)!.viewStateMessageNetworkError;
       } else {
-        message ??= viewStateError.message;
+        message ??= viewStateError!.message;
       }
       Future.microtask(() {
-        showToast(message, context: context);
+        showToast(message!, context: context);
       });
     }
   }

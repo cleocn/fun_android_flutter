@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/view_model/locale_model.dart';
-import 'package:fun_android/view_model/setting_model.dart';
-import 'package:launch_review/launch_review.dart';
+import '/generated/l10n.dart';
+import '/provider/provider_widget.dart';
+import '/view_model/locale_model.dart';
+import '/view_model/setting_model.dart';
+// import 'package:launch_review/launch_review.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/view_model/theme_model.dart';
+import '/view_model/theme_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatelessWidget {
@@ -16,7 +16,7 @@ class SettingPage extends StatelessWidget {
     var iconColor = Theme.of(context).accentColor;
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).setting),
+        title: Text(S.of(context)!.setting),
       ),
       body: SingleChildScrollView(
         child: ListTileTheme(
@@ -55,7 +55,7 @@ class SettingPage extends StatelessWidget {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(S.of(context).settingFont),
+                      Text(S.of(context)!.settingFont),
                       Text(
                         ThemeModel.fontName(
                             Provider.of<ThemeModel>(context,listen: false).fontIndex,
@@ -76,7 +76,7 @@ class SettingPage extends StatelessWidget {
                           var model = Provider.of<ThemeModel>(context,listen: false);
                           return RadioListTile(
                             value: index,
-                            onChanged: (index) {
+                            onChanged: (dynamic index) {
                               model.switchFont(index);
                             },
                             groupValue: model.fontIndex,
@@ -96,7 +96,7 @@ class SettingPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        S.of(context).settingLanguage,
+                        S.of(context)!.settingLanguage,
                         style: TextStyle(),
                       ),
                       Text(
@@ -119,7 +119,7 @@ class SettingPage extends StatelessWidget {
                           var model = Provider.of<LocaleModel>(context);
                           return RadioListTile(
                             value: index,
-                            onChanged: (index) {
+                            onChanged: (dynamic index) {
                               model.switchLocale(index);
                             },
                             groupValue: model.localeIndex,
@@ -135,11 +135,11 @@ class SettingPage extends StatelessWidget {
               Material(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text(S.of(context).rate),
+                  title: Text(S.of(context)!.rate),
                   onTap: () async {
-                    LaunchReview.launch(
-                        androidAppId: "cn.phoenixsky.funandroid",
-                        iOSAppId: "1477299503");
+                    // LaunchReview.launch(
+                    //     androidAppId: "cn.phoenixsky.funandroid",
+                    //     iOSAppId: "1477299503");
                   },
                   leading: Icon(
                     Icons.star,
@@ -154,14 +154,14 @@ class SettingPage extends StatelessWidget {
               Material(
                 color: Theme.of(context).cardColor,
                 child: ListTile(
-                  title: Text(S.of(context).feedback),
+                  title: Text(S.of(context)!.feedback),
                   onTap: () async {
                     var url =
                         'mailto:moran.fc@gmail.com?subject=FunAndroid%20Feedback&body=feedback';
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {
-                      showToast(S.of(context).githubIssue);
+                      showToast(S.of(context)!.githubIssue);
                       await Future.delayed(Duration(seconds: 1));
                       launch(
                           'https://github.com/phoenixsky/fun_android_flutter',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fun_android/config/resource_mananger.dart';
+import '/config/resource_mananger.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'home_page.dart';
@@ -25,7 +25,7 @@ class HomeSecondFloorOuter extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: Text('跌跌撞撞中,依旧热爱这个世界.',
-                style: Theme.of(context).textTheme.overline.copyWith(
+                style: Theme.of(context).textTheme.overline!.copyWith(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -84,7 +84,7 @@ class _MyBlogPageState extends State<MyBlogPage> {
             Container(),
             ValueListenableBuilder(
                 valueListenable: notifier,
-                builder: (context, value, child) => value
+                builder: (context, dynamic value, child) => value
                     ? SizedBox.shrink()
                     : Center(
                         child: CircularProgressIndicator(),

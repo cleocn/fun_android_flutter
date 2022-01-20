@@ -15,27 +15,30 @@ class Http extends BaseHttp {
       ..add(ApiInterceptor())
       // cookie持久化 异步
       ..add(CookieManager(
-          PersistCookieJar(dir: StorageManager.temporaryDirectory.path)));
+          PersistCookieJar(
+              ignoreExpires: true,
+              storage: FileStorage(StorageManager.temporaryDirectory.path))));
+          // PersistCookieJar()));
   }
 }
 
 /// 玩Android API
 class ApiInterceptor extends InterceptorsWrapper {
   @override
-  onRequest(RequestOptions options) async {
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     debugPrint('---api-request--->url--> ${options.baseUrl}${options.path}' +
         ' queryParameters: ${options.queryParameters}');
 //    debugPrint('---api-request--->data--->${options.data}');
-    return options;
+    handler.next(options);
   }
 
   @override
-  onResponse(Response response) {
+  onResponse(Response response, ResponseInterceptorHandler handler) {
 //    debugPrint('---api-response--->resp----->${response.data}');
     ResponseData respData = ResponseData.fromJson(response.data);
     if (respData.success) {
       response.data = respData.data;
-      return http.resolve(response);
+      return handler.resolve(response);
     } else {
       if (respData.code == -1001) {
         // 如果cookie过期,需要清除本地存储的登录信息

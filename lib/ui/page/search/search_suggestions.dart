@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart' hide SearchDelegate;
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/generated/l10n.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/config/resource_mananger.dart';
-import 'package:fun_android/flutter/search.dart';
-import 'package:fun_android/model/search.dart';
-import 'package:fun_android/provider/view_state_list_model.dart';
-import 'package:fun_android/view_model/search_model.dart';
+import '/config/resource_mananger.dart';
+import '/flutter/search.dart';
+import '/model/search.dart';
+import '/provider/view_state_list_model.dart';
+import '/view_model/search_model.dart';
 
 class SearchSuggestions<T> extends StatelessWidget {
   final SearchDelegate<T> delegate;
 
-  SearchSuggestions({@required this.delegate});
+  SearchSuggestions({required this.delegate});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,11 @@ class SearchSuggestions<T> extends StatelessWidget {
                     .copyWith(opacity: 0.6, size: 16),
                 child: MultiProvider(
                   providers: [
-                    Provider<TextStyle>.value(
-                        value: Theme.of(context).textTheme.body1),
+                    Provider<TextStyle?>.value(
+                        value: Theme.of(context).textTheme.bodyText1),
                     ProxyProvider<TextStyle, Color>(
                       update: (context, textStyle, _) =>
-                          textStyle.color.withOpacity(0.5),
+                          textStyle.color!.withOpacity(0.5),
                     ),
                   ],
                   child: Column(
@@ -58,7 +58,7 @@ class SearchSuggestions<T> extends StatelessWidget {
 class SearchHotKeysWidget extends StatefulWidget {
   final SearchDelegate delegate;
 
-  SearchHotKeysWidget({@required this.delegate, key}) : super(key: key);
+  SearchHotKeysWidget({required this.delegate, key}) : super(key: key);
 
   @override
   _SearchHotKeysWidgetState createState() => _SearchHotKeysWidgetState();
@@ -67,7 +67,7 @@ class SearchHotKeysWidget extends StatefulWidget {
 class _SearchHotKeysWidgetState extends State<SearchHotKeysWidget> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
+    WidgetsBinding.instance!.addPostFrameCallback((callback) {
       Provider.of<SearchHotKeyModel>(context,listen: false).initData();
     });
     super.initState();
@@ -86,7 +86,7 @@ class _SearchHotKeysWidgetState extends State<SearchHotKeysWidget> {
               FlatButton(
                 onPressed: null,
                 child: Text(
-                  S.of(context).searchHot,
+                  S.of(context)!.searchHot,
                   style: Provider.of<TextStyle>(context),
                 ),
               ),
@@ -102,13 +102,13 @@ class _SearchHotKeysWidgetState extends State<SearchHotKeysWidget> {
                                 Icons.autorenew,
                               ),
                               label: Text(
-                                S.of(context).searchShake,
+                                S.of(context)!.searchShake,
                               ))
                           : FlatButton.icon(
                               textColor: Provider.of<Color>(context),
                               onPressed: model.initData,
                               icon: Icon(Icons.refresh),
-                              label: Text(S.of(context).retry)));
+                              label: Text(S.of(context)!.retry)));
                 },
               )
             ],
@@ -116,9 +116,9 @@ class _SearchHotKeysWidgetState extends State<SearchHotKeysWidget> {
         ),
         SearchSuggestionStateWidget<SearchHotKeyModel, SearchHotKey>(
           builder: (context, item) => ActionChip(
-            label: Text(item.name),
+            label: Text(item.name!),
             onPressed: () {
-              widget.delegate.query = item.name;
+              widget.delegate.query = item.name!;
               widget.delegate.showResults(context);
             },
           ),
@@ -131,7 +131,7 @@ class _SearchHotKeysWidgetState extends State<SearchHotKeysWidget> {
 class SearchHistoriesWidget<T> extends StatefulWidget {
   final SearchDelegate<T> delegate;
 
-  SearchHistoriesWidget({@required this.delegate, key}) : super(key: key);
+  SearchHistoriesWidget({required this.delegate, key}) : super(key: key);
 
   @override
   _SearchHistoriesWidgetState createState() => _SearchHistoriesWidgetState();
@@ -140,7 +140,7 @@ class SearchHistoriesWidget<T> extends StatefulWidget {
 class _SearchHistoriesWidgetState extends State<SearchHistoriesWidget> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((callback) {
+    WidgetsBinding.instance!.addPostFrameCallback((callback) {
       Provider.of<SearchHistoryModel>(context,listen: false).initData();
     });
     super.initState();
@@ -159,7 +159,7 @@ class _SearchHistoriesWidgetState extends State<SearchHistoriesWidget> {
               FlatButton(
                 onPressed: null,
                 child: Text(
-                  S.of(context).searchHistory,
+                  S.of(context)!.searchHistory,
                   style: Provider.of<TextStyle>(context),
                 ),
               ),
@@ -171,12 +171,12 @@ class _SearchHistoriesWidgetState extends State<SearchHistoriesWidget> {
                             textColor: Provider.of<Color>(context),
                             onPressed: model.clearHistory,
                             icon: Icon(Icons.clear),
-                            label: Text(S.of(context).clear))
+                            label: Text(S.of(context)!.clear))
                         : FlatButton.icon(
                             textColor: Provider.of<Color>(context),
                             onPressed: model.initData,
                             icon: Icon(Icons.refresh),
-                            label: Text(S.of(context).retry))),
+                            label: Text(S.of(context)!.retry))),
               ),
             ],
           ),
@@ -199,7 +199,7 @@ class SearchSuggestionStateWidget<T extends ViewStateListModel, E>
     extends StatelessWidget {
   final Widget Function(BuildContext context, E data) builder;
 
-  SearchSuggestionStateWidget({@required this.builder});
+  SearchSuggestionStateWidget({required this.builder});
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +210,8 @@ class SearchSuggestionStateWidget<T extends ViewStateListModel, E>
                   ? Wrap(
                       alignment: WrapAlignment.start,
                       spacing: 10,
-                      children: List.generate(model.list.length, (index) {
-                        E item = model.list[index];
+                      children: List.generate(model.list!.length, (index) {
+                        E item = model.list![index];
                         return builder(context, item);
                       }),
                     )

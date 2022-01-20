@@ -3,15 +3,15 @@ import 'package:flutter/material.dart'
     hide DropdownButton, DropdownMenuItem, DropdownButtonHideUnderline;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:fun_android/provider/view_state_list_model.dart';
-import 'package:fun_android/utils/status_bar_utils.dart';
+import '/provider/view_state_list_model.dart';
+import '/utils/status_bar_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:fun_android/flutter/dropdown.dart';
-import 'package:fun_android/model/tree.dart';
-import 'package:fun_android/provider/provider_widget.dart';
+import '/flutter/dropdown.dart';
+import '/model/tree.dart';
+import '/provider/provider_widget.dart';
 
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/view_model/project_model.dart';
+import '/provider/view_state_widget.dart';
+import '/view_model/project_model.dart';
 
 import '../article/article_list_page.dart';
 
@@ -25,8 +25,8 @@ class _ProjectPageState extends State<ProjectPage>
   @override
   bool get wantKeepAlive => true;
 
-  ValueNotifier<int> valueNotifier;
-  TabController tabController;
+  late ValueNotifier<int> valueNotifier;
+  TabController? tabController;
 
   @override
   void initState() {
@@ -58,19 +58,19 @@ class _ProjectPageState extends State<ProjectPage>
               return ViewStateErrorWidget(error: model.viewStateError, onPressed: model.initData);
             }
 
-            List<Tree> treeList = model.list;
+            List<Tree>? treeList = model.list;
             var primaryColor = Theme.of(context).primaryColor;
             return ValueListenableProvider<int>.value(
               value: valueNotifier,
               child: DefaultTabController(
-                length: model.list.length,
+                length: model.list!.length,
                 initialIndex: valueNotifier.value,
                 child: Builder(
                   builder: (context) {
                     if (tabController == null) {
                       tabController = DefaultTabController.of(context);
-                      tabController.addListener(() {
-                        valueNotifier.value = tabController.index;
+                      tabController!.addListener(() {
+                        valueNotifier.value = tabController!.index;
                       });
                     }
                     return Scaffold(
@@ -85,7 +85,7 @@ class _ProjectPageState extends State<ProjectPage>
                               child: TabBar(
                                   isScrollable: true,
                                   tabs: List.generate(
-                                      treeList.length,
+                                      treeList!.length,
                                       (index) => Tab(
                                             text: treeList[index].name,
                                           ))),
@@ -124,26 +124,26 @@ class CategoryDropdownWidget extends StatelessWidget {
             child: DropdownButton(
           elevation: 0,
           value: currentIndex,
-          style: Theme.of(context).primaryTextTheme.subhead,
-          items: List.generate(model.list.length, (index) {
+          style: Theme.of(context).primaryTextTheme.subtitle1,
+          items: List.generate(model.list!.length, (index) {
             var theme = Theme.of(context);
-            var subhead = theme.primaryTextTheme.subhead;
+            var subhead = theme.primaryTextTheme.subtitle1;
             return DropdownMenuItem(
               value: index,
               child: Text(
-                model.list[index].name,
+                model.list![index].name,
                 style: currentIndex == index
-                    ? subhead.apply(
+                    ? subhead!.apply(
                         fontSizeFactor: 1.15,
                         color: theme.brightness == Brightness.light
                             ? Colors.white
                             : theme.accentColor)
-                    : subhead.apply(color: subhead.color.withAlpha(200)),
+                    : subhead!.apply(color: subhead.color!.withAlpha(200)),
               ),
             );
           }),
-          onChanged: (value) {
-            DefaultTabController.of(context).animateTo(value);
+          onChanged: (dynamic value) {
+            DefaultTabController.of(context)!.animateTo(value);
           },
           isExpanded: true,
           icon: Container(

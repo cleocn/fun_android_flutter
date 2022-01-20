@@ -29,31 +29,31 @@ class _DropdownMenuPainter extends CustomPainter {
     // of onChanged callback here.
     color: color,
     borderRadius: BorderRadius.circular(2.0),
-    boxShadow: kElevationToShadow[elevation],
+    boxShadow: kElevationToShadow[elevation!],
   ).createBoxPainter(),
         super(repaint: resize);
 
-  final Color color;
-  final int elevation;
-  final int selectedIndex;
-  final Animation<double> resize;
+  final Color? color;
+  final int? elevation;
+  final int? selectedIndex;
+  final Animation<double>? resize;
 
   final BoxPainter _painter;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double selectedItemOffset = selectedIndex * _kMenuItemHeight + kMaterialListPadding.top;
+    final double selectedItemOffset = selectedIndex! * _kMenuItemHeight + kMaterialListPadding.top;
     final Tween<double> top = Tween<double>(
       begin: selectedItemOffset.clamp(0.0, size.height - _kMenuItemHeight),
       end: 0.0,
     );
 
     final Tween<double> bottom = Tween<double>(
-      begin: (top.begin + _kMenuItemHeight).clamp(_kMenuItemHeight, size.height),
+      begin: (top.begin! + _kMenuItemHeight).clamp(_kMenuItemHeight, size.height),
       end: size.height,
     );
 
-    final Rect rect = Rect.fromLTRB(0.0, top.evaluate(resize), size.width, bottom.evaluate(resize));
+    final Rect rect = Rect.fromLTRB(0.0, top.evaluate(resize!), size.width, bottom.evaluate(resize!));
 
     _painter.paint(canvas, rect.topLeft, ImageConfiguration(size: rect.size));
   }
@@ -84,21 +84,21 @@ class _DropdownScrollBehavior extends ScrollBehavior {
 
 class _DropdownMenu<T> extends StatefulWidget {
   const _DropdownMenu({
-    Key key,
+    Key? key,
     this.padding,
     this.route,
   }) : super(key: key);
 
-  final _DropdownRoute<T> route;
-  final EdgeInsets padding;
+  final _DropdownRoute<T>? route;
+  final EdgeInsets? padding;
 
   @override
   _DropdownMenuState<T> createState() => _DropdownMenuState<T>();
 }
 
 class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
-  CurvedAnimation _fadeOpacity;
-  CurvedAnimation _resize;
+  late CurvedAnimation _fadeOpacity;
+  CurvedAnimation? _resize;
 
   @override
   void initState() {
@@ -108,12 +108,12 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
     // the CurvedAnimation objects in build, we'd lose
     // CurvedAnimation._curveDirection.
     _fadeOpacity = CurvedAnimation(
-      parent: widget.route.animation,
+      parent: widget.route!.animation!,
       curve: const Interval(0.0, 0.25),
       reverseCurve: const Interval(0.75, 1.0),
     );
     _resize = CurvedAnimation(
-      parent: widget.route.animation,
+      parent: widget.route!.animation!,
       curve: const Interval(0.25, 0.5),
       reverseCurve: const Threshold(0.0),
     );
@@ -131,28 +131,28 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
     // in the first 0.25s.
     assert(debugCheckHasMaterialLocalizations(context));
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
-    final _DropdownRoute<T> route = widget.route;
-    final double unit = 0.5 / (route.items.length + 1.5);
+    final _DropdownRoute<T> route = widget.route!;
+    final double unit = 0.5 / (route.items!.length + 1.5);
     final List<Widget> children = <Widget>[];
-    for (int itemIndex = 0; itemIndex < route.items.length; ++itemIndex) {
+    for (int itemIndex = 0; itemIndex < route.items!.length; ++itemIndex) {
       CurvedAnimation opacity;
       if (itemIndex == route.selectedIndex) {
-        opacity = CurvedAnimation(parent: route.animation, curve: const Threshold(0.0));
+        opacity = CurvedAnimation(parent: route.animation!, curve: const Threshold(0.0));
       } else {
         final double start = (0.5 + (itemIndex + 1) * unit).clamp(0.0, 1.0);
         final double end = (start + 1.5 * unit).clamp(0.0, 1.0);
-        opacity = CurvedAnimation(parent: route.animation, curve: Interval(start, end));
+        opacity = CurvedAnimation(parent: route.animation!, curve: Interval(start, end));
       }
       children.add(FadeTransition(
         opacity: opacity,
         child: InkWell(
           child: Container(
             padding: widget.padding,
-            child: route.items[itemIndex],
+            child: route.items![itemIndex],
           ),
           onTap: () => Navigator.pop(
             context,
-            _DropdownRouteResult<T>(route.items[itemIndex].value),
+            _DropdownRouteResult<T?>(route.items![itemIndex].value),
           ),
         ),
       ));
@@ -181,7 +181,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
                 behavior: const _DropdownScrollBehavior(),
                 child: Scrollbar(
                   child: ListView(
-                    controller: widget.route.scrollController,
+                    controller: widget.route!.scrollController,
                     padding: kMaterialListPadding,
                     itemExtent: _kMenuItemHeight,
                     shrinkWrap: true,
@@ -199,13 +199,13 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
 
 class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
   _DropdownMenuRouteLayout({
-    @required this.buttonRect,
-    @required this.menuTop,
-    @required this.menuHeight,
-    @required this.textDirection,
+    required this.buttonRect,
+    required this.menuTop,
+    required this.menuHeight,
+    required this.textDirection,
   });
 
-  final Rect buttonRect;
+  final Rect? buttonRect;
   final double menuTop;
   final double menuHeight;
   final TextDirection textDirection;
@@ -219,7 +219,7 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
     final double maxHeight = math.max(0.0, constraints.maxHeight - 2 * _kMenuItemHeight);
     // The width of a menu should be at most the view width. This ensures that
     // the menu does not extend past the left and right edges of the screen.
-    final double width = math.min(constraints.maxWidth, buttonRect.width);
+    final double width = math.min(constraints.maxWidth, buttonRect!.width);
     return BoxConstraints(
       minWidth: width,
       maxWidth: width,
@@ -232,7 +232,7 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
   Offset getPositionForChild(Size size, Size childSize) {
     assert(() {
       final Rect container = Offset.zero & size;
-      if (container.intersect(buttonRect) == buttonRect) {
+      if (container.intersect(buttonRect!) == buttonRect) {
         // If the button was entirely on-screen, then verify
         // that the menu is also on-screen.
         // If the button was a bit off-screen, then, oh well.
@@ -242,13 +242,13 @@ class _DropdownMenuRouteLayout<T> extends SingleChildLayoutDelegate {
       return true;
     }());
     assert(textDirection != null);
-    double left;
+    late double left;
     switch (textDirection) {
       case TextDirection.rtl:
-        left = buttonRect.right.clamp(0.0, size.width) - childSize.width;
+        left = buttonRect!.right.clamp(0.0, size.width) - childSize.width;
         break;
       case TextDirection.ltr:
-        left = buttonRect.left.clamp(0.0, size.width - childSize.width);
+        left = buttonRect!.left.clamp(0.0, size.width - childSize.width);
         break;
     }
     return Offset(left, menuTop);
@@ -291,19 +291,19 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
     this.selectedIndex,
     this.elevation = 8,
     this.theme,
-    @required this.style,
+    required this.style,
     this.barrierLabel,
   }) : assert(style != null);
 
-  final List<DropdownMenuItem<T>> items;
-  final EdgeInsetsGeometry padding;
-  final Rect buttonRect;
-  final int selectedIndex;
+  final List<DropdownMenuItem<T>>? items;
+  final EdgeInsetsGeometry? padding;
+  final Rect? buttonRect;
+  final int? selectedIndex;
   final int elevation;
-  final ThemeData theme;
+  final ThemeData? theme;
   final TextStyle style;
 
-  ScrollController scrollController;
+  ScrollController? scrollController;
 
   @override
   Duration get transitionDuration => _kDropdownMenuDuration;
@@ -312,10 +312,10 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
   bool get barrierDismissible => true;
 
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
-  final String barrierLabel;
+  final String? barrierLabel;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -343,7 +343,7 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
 
 class _DropdownRoutePage<T> extends StatelessWidget {
   const _DropdownRoutePage({
-    Key key,
+    Key? key,
     this.route,
     this.constraints,
     this.items,
@@ -355,25 +355,25 @@ class _DropdownRoutePage<T> extends StatelessWidget {
     this.style,
   }) : super(key: key);
 
-  final _DropdownRoute<T> route;
-  final BoxConstraints constraints;
-  final List<DropdownMenuItem<T>> items;
-  final EdgeInsetsGeometry padding;
-  final Rect buttonRect;
-  final int selectedIndex;
+  final _DropdownRoute<T>? route;
+  final BoxConstraints? constraints;
+  final List<DropdownMenuItem<T>>? items;
+  final EdgeInsetsGeometry? padding;
+  final Rect? buttonRect;
+  final int? selectedIndex;
   final int elevation;
-  final ThemeData theme;
-  final TextStyle style;
+  final ThemeData? theme;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
     ///修改源码: 调整下拉框高度
-    final double availableHeight = constraints.maxHeight * 0.5;
+    final double availableHeight = constraints!.maxHeight * 0.5;
     final double maxMenuHeight = availableHeight - 2.0 * _kMenuItemHeight;
 
-    final double buttonTop = buttonRect.top;
-    final double buttonBottom = math.min(buttonRect.bottom, availableHeight);
+    final double buttonTop = buttonRect!.top;
+    final double buttonBottom = math.min(buttonRect!.bottom, availableHeight);
 
     // If the button is placed on the bottom or top of the screen, its top or
     // bottom may be less than [_kMenuItemHeight] from the edge of the screen.
@@ -382,10 +382,10 @@ class _DropdownRoutePage<T> extends StatelessWidget {
     final double topLimit = math.min(_kMenuItemHeight, buttonTop);
     final double bottomLimit = math.max(availableHeight - _kMenuItemHeight, buttonBottom);
 
-    final double selectedItemOffset = selectedIndex * _kMenuItemHeight + kMaterialListPadding.top;
+    final double selectedItemOffset = selectedIndex! * _kMenuItemHeight + kMaterialListPadding.top;
 
-    double menuTop = (buttonTop - selectedItemOffset) - (_kMenuItemHeight - buttonRect.height) / 2.0;
-    final double preferredMenuHeight = (items.length * _kMenuItemHeight) + kMaterialListPadding.vertical;
+    double menuTop = (buttonTop - selectedItemOffset) - (_kMenuItemHeight - buttonRect!.height) / 2.0;
+    final double preferredMenuHeight = (items!.length * _kMenuItemHeight) + kMaterialListPadding.vertical;
 
     // If there are too many elements in the menu, we need to shrink it down
     // so it is at most the maxMenuHeight.
@@ -406,7 +406,7 @@ class _DropdownRoutePage<T> extends StatelessWidget {
       menuTop = menuBottom - menuHeight;
     }
 
-    if (route.scrollController == null) {
+    if (route!.scrollController == null) {
       // The limit is asymmetrical because we do not care how far positive the
       // limit goes. We are only concerned about the case where the value of
       // [buttonTop - menuTop] is larger than selectedItemOffset, ie. when
@@ -414,17 +414,17 @@ class _DropdownRoutePage<T> extends StatelessWidget {
       // is close to 0.
       final double scrollOffset = preferredMenuHeight > maxMenuHeight ? math.max(0.0, selectedItemOffset - (buttonTop - menuTop)) : 0.0;
       ///修改源码: 调整默认滚动位置
-      route.scrollController = ScrollController(initialScrollOffset: scrollOffset);
+      route!.scrollController = ScrollController(initialScrollOffset: scrollOffset);
     }
 
     final TextDirection textDirection = Directionality.of(context);
     Widget menu = _DropdownMenu<T>(
       route: route,
-      padding: padding.resolve(textDirection),
+      padding: padding!.resolve(textDirection),
     );
 
     if (theme != null)
-      menu = Theme(data: theme, child: menu);
+      menu = Theme(data: theme!, child: menu);
 
     return MediaQuery.removePadding(
       context: context,
@@ -458,9 +458,9 @@ class DropdownMenuItem<T> extends StatelessWidget {
   ///
   /// The [child] argument is required.
   const DropdownMenuItem({
-    Key key,
+    Key? key,
     this.value,
-    @required this.child,
+    required this.child,
   }) : assert(child != null),
         super(key: key);
 
@@ -472,7 +472,7 @@ class DropdownMenuItem<T> extends StatelessWidget {
   /// The value to return if the user selects this menu item.
   ///
   /// Eventually returned in a call to [DropdownButton.onChanged].
-  final T value;
+  final T? value;
 
   @override
   Widget build(BuildContext context) {
@@ -494,8 +494,8 @@ class DropdownButtonHideUnderline extends InheritedWidget {
   /// Creates a [DropdownButtonHideUnderline]. A non-null [child] must
   /// be given.
   const DropdownButtonHideUnderline({
-    Key key,
-    @required Widget child,
+    Key? key,
+    required Widget child,
   }) : assert(child != null),
         super(key: key, child: child);
 
@@ -584,12 +584,12 @@ class DropdownButton<T> extends StatefulWidget {
   /// defaults, so do not need to be specified). The boolean [isDense] and
   /// [isExpanded] arguments must not be null.
   DropdownButton({
-    Key key,
-    @required this.items,
+    Key? key,
+    required this.items,
     this.value,
     this.hint,
     this.disabledHint,
-    @required this.onChanged,
+    required this.onChanged,
     this.elevation = 8,
     this.style,
     this.underline,
@@ -617,15 +617,15 @@ class DropdownButton<T> extends StatefulWidget {
   /// The value of the currently selected [DropdownMenuItem], or null if no
   /// item has been selected. If `value` is null then the menu is popped up as
   /// if the first item were selected.
-  final T value;
+  final T? value;
 
   /// Displayed if [value] is null.
-  final Widget hint;
+  final Widget? hint;
 
   /// A message to show when the dropdown is disabled.
   ///
   /// Displayed if [items] or [onChanged] is null.
-  final Widget disabledHint;
+  final Widget? disabledHint;
 
   /// Called when the user selects an item.
   ///
@@ -648,17 +648,17 @@ class DropdownButton<T> extends StatefulWidget {
   ///
   /// Defaults to the [TextTheme.subhead] value of the current
   /// [ThemeData.textTheme] of the current [Theme].
-  final TextStyle style;
+  final TextStyle? style;
 
   /// The widget to use for drawing the drop-down button's underline.
   ///
   /// Defaults to a 0.0 width bottom border with color 0xFFBDBDBD.
-  final Widget underline;
+  final Widget? underline;
 
   /// The widget to use for the drop-down button's icon.
   ///
   /// Defaults to an [Icon] with the [Icons.arrow_drop_down] glyph.
-  final Widget icon;
+  final Widget? icon;
 
   /// The color of any [Icon] descendant of [icon] if this button is disabled,
   /// i.e. if [onChanged] is null.
@@ -666,7 +666,7 @@ class DropdownButton<T> extends StatefulWidget {
   /// Defaults to [Colors.grey.shade400] when the theme's
   /// [ThemeData.brightness] is [Brightness.light] and to
   /// [Colors.white10] when it is [Brightness.dark]
-  final Color iconDisabledColor;
+  final Color? iconDisabledColor;
 
   /// The color of any [Icon] descendant of [icon] if this button is enabled,
   /// i.e. if [onChanged] is defined.
@@ -674,7 +674,7 @@ class DropdownButton<T> extends StatefulWidget {
   /// Defaults to [Colors.grey.shade700] when the theme's
   /// [ThemeData.brightness] is [Brightness.light] and to
   /// [Colors.white70] when it is [Brightness.dark]
-  final Color iconEnabledColor;
+  final Color? iconEnabledColor;
 
   /// The size to use for the drop-down button's down arrow icon button.
   ///
@@ -701,19 +701,19 @@ class DropdownButton<T> extends StatefulWidget {
 }
 
 class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindingObserver {
-  int _selectedIndex;
-  _DropdownRoute<T> _dropdownRoute;
+  int? _selectedIndex;
+  _DropdownRoute<T>? _dropdownRoute;
 
   @override
   void initState() {
     super.initState();
     _updateSelectedIndex();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     _removeDropdownRoute();
     super.dispose();
   }
@@ -752,10 +752,10 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
     }
   }
 
-  TextStyle get _textStyle => widget.style ?? Theme.of(context).textTheme.subhead;
+  TextStyle? get _textStyle => widget.style ?? Theme.of(context).textTheme.subtitle1;
 
   void _handleTap() {
-    final RenderBox itemBox = context.findRenderObject();
+    final RenderBox itemBox = context.findRenderObject() as RenderBox;
     final Rect itemRect = itemBox.localToGlobal(Offset.zero) & itemBox.size;
     final TextDirection textDirection = Directionality.of(context);
     final EdgeInsetsGeometry menuMargin = ButtonTheme.of(context).alignedDropdown
@@ -770,11 +770,11 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
       selectedIndex: _selectedIndex ?? 0,
       elevation: widget.elevation,
       theme: Theme.of(context),
-      style: _textStyle,
+      style: _textStyle!,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     );
 
-    Navigator.push(context, _dropdownRoute).then<void>((_DropdownRouteResult<T> newValue) {
+    Navigator.push(context, _dropdownRoute!).then<void>((_DropdownRouteResult<T>? newValue) {
       _dropdownRoute = null;
       if (!mounted || newValue == null)
         return;
@@ -788,11 +788,11 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
   // Similarly, we don't reduce the height of the button so much that its icon
   // would be clipped.
   double get _denseButtonHeight {
-    final double fontSize = _textStyle.fontSize ?? Theme.of(context).textTheme.subhead.fontSize;
+    final double fontSize = _textStyle!.fontSize ?? Theme.of(context).textTheme.subtitle1!.fontSize!;
     return math.max(fontSize, math.max(widget.iconSize, _kDenseButtonHeight));
   }
 
-  Color get _iconColor {
+  Color? get _iconColor {
     // These colors are not defined in the Material Design spec.
     if (_enabled) {
       if (widget.iconEnabledColor != null) {
@@ -832,13 +832,13 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
     // The width of the button and the menu are defined by the widest
     // item and the width of the hint.
     final List<Widget> items = _enabled ? List<Widget>.from(widget.items) : <Widget>[];
-    int hintIndex;
+    int? hintIndex;
     if (widget.hint != null || (!_enabled && widget.disabledHint != null)) {
-      final Widget emplacedHint =
-      _enabled ? widget.hint : DropdownMenuItem<Widget>(child: widget.disabledHint ?? widget.hint);
+      final Widget? emplacedHint =
+      _enabled ? widget.hint : DropdownMenuItem<Widget>(child: widget.disabledHint ?? widget.hint!);
       hintIndex = items.length;
       items.add(DefaultTextStyle(
-        style: _textStyle.copyWith(color: Theme.of(context).hintColor),
+        style: _textStyle!.copyWith(color: Theme.of(context).hintColor),
         child: IgnorePointer(
           child: emplacedHint,
           ignoringSemantics: false,
@@ -852,7 +852,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
 
     // If value is null (then _selectedIndex is null) or if disabled then we
     // display the hint or nothing at all.
-    final int index = _enabled ? (_selectedIndex ?? hintIndex) : hintIndex;
+    final int? index = _enabled ? (_selectedIndex ?? hintIndex) : hintIndex;
     Widget innerItemsWidget;
     if (items.isEmpty) {
       innerItemsWidget = Container();
@@ -867,7 +867,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
     const Icon defaultIcon = Icon(Icons.arrow_drop_down);
 
     Widget result = DefaultTextStyle(
-      style: _textStyle,
+      style: _textStyle!,
       child: Container(
         padding: padding.resolve(Directionality.of(context)),
         height: widget.isDense ? _denseButtonHeight : null,
@@ -920,27 +920,27 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
 }
 
 /// A convenience widget that wraps a [DropdownButton] in a [FormField].
-class DropdownButtonFormField<T> extends FormField<T> {
+class DropdownButtonFormField<T> extends FormField<T?> {
   /// Creates a [DropdownButton] widget wrapped in an [InputDecorator] and
   /// [FormField].
   ///
   /// The [DropdownButton] [items] parameters must not be null.
   DropdownButtonFormField({
-    Key key,
-    T value,
-    @required List<DropdownMenuItem<T>> items,
+    Key? key,
+    T? value,
+    required List<DropdownMenuItem<T>> items,
     this.onChanged,
     InputDecoration decoration = const InputDecoration(),
-    FormFieldSetter<T> onSaved,
-    FormFieldValidator<T> validator,
-    Widget hint,
+    FormFieldSetter<T>? onSaved,
+    FormFieldValidator<T>? validator,
+    Widget? hint,
   }) : assert(decoration != null),
         super(
           key: key,
           onSaved: onSaved,
           initialValue: value,
           validator: validator,
-          builder: (FormFieldState<T> field) {
+          builder: (FormFieldState<T?> field) {
             final InputDecoration effectiveDecoration = decoration
                 .applyDefaults(Theme.of(field.context).inputDecorationTheme);
             return InputDecorator(
@@ -960,20 +960,20 @@ class DropdownButtonFormField<T> extends FormField<T> {
       );
 
   /// Called when the user selects an item.
-  final ValueChanged<T> onChanged;
+  final ValueChanged<T>? onChanged;
 
   @override
-  FormFieldState<T> createState() => _DropdownButtonFormFieldState<T>();
+  FormFieldState<T?> createState() => _DropdownButtonFormFieldState<T>();
 }
 
-class _DropdownButtonFormFieldState<T> extends FormFieldState<T> {
+class _DropdownButtonFormFieldState<T> extends FormFieldState<T?> {
   @override
-  DropdownButtonFormField<T> get widget => super.widget;
+  DropdownButtonFormField<T?> get widget => super.widget as DropdownButtonFormField<T?>;
 
   @override
-  void didChange(T value) {
+  void didChange(T? value) {
     super.didChange(value);
     if (widget.onChanged != null)
-      widget.onChanged(value);
+      widget.onChanged!(value);
   }
 }

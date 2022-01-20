@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/ui/helper/refresh_helper.dart';
-import 'package:fun_android/ui/widget/article_skeleton.dart';
-import 'package:fun_android/ui/widget/skeleton.dart';
+import '/ui/helper/refresh_helper.dart';
+import '/ui/widget/article_skeleton.dart';
+import '/ui/widget/skeleton.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/model/tree.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/ui/widget/article_list_Item.dart';
-import 'package:fun_android/view_model/structure_model.dart';
+import '/model/article.dart';
+import '/model/tree.dart';
+import '/provider/provider_widget.dart';
+import '/provider/view_state_widget.dart';
+import '/ui/widget/article_list_Item.dart';
+import '/view_model/structure_model.dart';
 
 /// 文章列表页面
 class ArticleListPage extends StatefulWidget {
   /// 目录id
-  final int cid;
+  final int? cid;
 
   ArticleListPage(this.cid);
 
@@ -38,7 +38,7 @@ class _ArticleListPageState extends State<ArticleListPage>
           return SkeletonList(
             builder: (context, index) => ArticleSkeletonItem(),
           );
-        } else if (model.isError && model.list.isEmpty) {
+        } else if (model.isError && model.list!.isEmpty) {
           return ViewStateErrorWidget(
               error: model.viewStateError, onPressed: model.initData);
         } else if (model.isEmpty) {
@@ -52,9 +52,9 @@ class _ArticleListPageState extends State<ArticleListPage>
             onLoading: model.loadMore,
             enablePullUp: true,
             child: ListView.builder(
-                itemCount: model.list.length,
+                itemCount: model.list!.length,
                 itemBuilder: (context, index) {
-                  Article item = model.list[index];
+                  Article item = model.list![index];
                   return ArticleItemWidget(item);
                 }));
       },
@@ -77,7 +77,7 @@ class ArticleCategoryTabPage extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(tree.name),
+            title: Text(tree.name!),
             bottom: TabBar(
                 isScrollable: true,
                 tabs: List.generate(

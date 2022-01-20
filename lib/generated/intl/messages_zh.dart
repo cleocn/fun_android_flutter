@@ -21,7 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m0(version) => "发现新版本${version},是否更新?";
 
-  final messages = _notInlinedMessages(_notInlinedMessages);
+  final Map<String, dynamic> messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "Like" : MessageLookupByLibrary.simpleMessage("收藏"),
     "about" : MessageLookupByLibrary.simpleMessage("关于"),

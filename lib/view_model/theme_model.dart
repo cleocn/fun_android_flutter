@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/ui/helper/theme_helper.dart';
-import 'package:fun_android/config/storage_manager.dart';
+import '/generated/l10n.dart';
+import '/ui/helper/theme_helper.dart';
+import '/config/storage_manager.dart';
 
 //const Color(0xFF5394FF),
 
@@ -16,13 +16,13 @@ class ThemeModel with ChangeNotifier {
   static const fontValueList = ['system', 'kuaile'];
 
   /// 用户选择的明暗模式
-  bool _userDarkMode;
+  bool? _userDarkMode;
 
   /// 当前主题颜色
-  MaterialColor _themeColor;
+  MaterialColor? _themeColor;
 
   /// 当前字体索引
-  int _fontIndex;
+  int? _fontIndex;
 
   ThemeModel() {
     /// 用户选择的明暗模式
@@ -37,22 +37,22 @@ class ThemeModel with ChangeNotifier {
     _fontIndex = StorageManager.sharedPreferences.getInt(kFontIndex) ?? 0;
   }
 
-  int get fontIndex => _fontIndex;
+  int? get fontIndex => _fontIndex;
 
   /// 切换指定色彩
   ///
   /// 没有传[brightness]就不改变brightness,color同理
-  void switchTheme({bool userDarkMode, MaterialColor color}) {
+  void switchTheme({bool? userDarkMode, MaterialColor? color}) {
     _userDarkMode = userDarkMode ?? _userDarkMode;
     _themeColor = color ?? _themeColor;
     notifyListeners();
-    saveTheme2Storage(_userDarkMode, _themeColor);
+    saveTheme2Storage(_userDarkMode!, _themeColor!);
   }
 
   /// 随机一个主题色彩
   ///
   /// 可以指定明暗模式,不指定则保持不变
-  void switchRandomTheme({Brightness brightness}) {
+  void switchRandomTheme({Brightness? brightness}) {
     int colorIndex = Random().nextInt(Colors.primaries.length - 1);
     switchTheme(
       userDarkMode: Random().nextBool(),
@@ -70,11 +70,11 @@ class ThemeModel with ChangeNotifier {
   /// 根据主题 明暗 和 颜色 生成对应的主题
   /// [dark]系统的Dark Mode
   themeData({bool platformDarkMode: false}) {
-    var isDark = platformDarkMode || _userDarkMode;
+    var isDark = platformDarkMode || _userDarkMode!;
     Brightness brightness = isDark ? Brightness.dark : Brightness.light;
 
-    var themeColor = _themeColor;
-    var accentColor = isDark ? themeColor[700] : _themeColor;
+    var themeColor = _themeColor!;
+    var accentColor = isDark ? themeColor[700]! : _themeColor!;
     var themeData = ThemeData(
         brightness: brightness,
         // 主题颜色属于亮色系还是属于暗色系(eg:dark时,AppBarTitle文字及状态栏文字的颜色为白色,反之为黑色)
@@ -84,7 +84,7 @@ class ThemeModel with ChangeNotifier {
         accentColorBrightness: Brightness.dark,
         primarySwatch: themeColor,
         accentColor: accentColor,
-        fontFamily: fontValueList[fontIndex]);
+        fontFamily: fontValueList[fontIndex!]);
 
     themeData = themeData.copyWith(
       brightness: brightness,
@@ -101,7 +101,7 @@ class ThemeModel with ChangeNotifier {
       cursorColor: accentColor,
       textTheme: themeData.textTheme.copyWith(
         /// 解决中文hint不居中的问题 https://github.com/flutter/flutter/issues/40248
-          subhead: themeData.textTheme.subhead
+          subtitle1: themeData.textTheme.subtitle1!
               .copyWith(textBaseline: TextBaseline.alphabetic)),
       textSelectionColor: accentColor.withAlpha(60),
       textSelectionHandleColor: accentColor.withAlpha(60),
@@ -132,9 +132,9 @@ class ThemeModel with ChangeNotifier {
   static String fontName(index, context) {
     switch (index) {
       case 0:
-        return S.of(context).autoBySystem;
+        return S.of(context)!.autoBySystem;
       case 1:
-        return S.of(context).fontKuaiLe;
+        return S.of(context)!.fontKuaiLe;
       default:
         return '';
     }

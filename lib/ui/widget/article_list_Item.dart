@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/ui/helper/favourite_helper.dart';
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/view_model/favourite_model.dart';
-import 'package:fun_android/view_model/user_model.dart';
+import '/generated/l10n.dart';
+import '/ui/helper/favourite_helper.dart';
+import '/config/router_manger.dart';
+import '/model/article.dart';
+import '/provider/provider_widget.dart';
+import '/view_model/favourite_model.dart';
+import '/view_model/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 
@@ -17,8 +17,8 @@ import 'article_tag.dart';
 
 class ArticleItemWidget extends StatelessWidget {
   final Article article;
-  final int index;
-  final GestureTapCallback onTap;
+  final int? index;
+  final GestureTapCallback? onTap;
 
   /// 首页置顶
   final bool top;
@@ -71,18 +71,18 @@ class ArticleItemWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
-                          isNotBlank(article.author) ? article.author : article.shareUser ?? '',
+                          isNotBlank(article.author) ? article.author! : article.shareUser ?? '',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ),
                       Expanded(
                         child: SizedBox.shrink(),
                       ),
-                      Text(article.niceDate,
+                      Text(article.niceDate!,
                           style: Theme.of(context).textTheme.caption),
                     ],
                   ),
-                  if (article.envelopePic.isEmpty)
+                  if (article.envelopePic!.isEmpty)
                     Padding(
                       padding: EdgeInsets.only(top: 7),
                       child: ArticleTitleWidget(article.title),
@@ -100,7 +100,7 @@ class ArticleItemWidget extends StatelessWidget {
                                 height: 2,
                               ),
                               Text(
-                                article.desc,
+                                article.desc!,
                                 style: Theme.of(context).textTheme.caption,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -120,12 +120,12 @@ class ArticleItemWidget extends StatelessWidget {
                     ),
                   Row(
                     children: <Widget>[
-                      if (top) ArticleTag(S.of(context).article_tag_top),
+                      if (top) ArticleTag(S.of(context)!.article_tag_top),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
                           (article.superChapterName != null
-                                  ? article.superChapterName + ' · '
+                                  ? article.superChapterName! + ' · '
                                   : '') +
                               (article.chapterName ?? ''),
                           style: Theme.of(context).textTheme.overline,
@@ -147,7 +147,7 @@ class ArticleItemWidget extends StatelessWidget {
                   builder: (context, model, child) {
                     //利用child局部刷新
                     if (model[article.id] == null) {
-                      return child;
+                      return child!;
                     }
                     return ArticleFavouriteWidget(
                         article..collect = model[article.id],
@@ -162,7 +162,7 @@ class ArticleItemWidget extends StatelessWidget {
 }
 
 class ArticleTitleWidget extends StatelessWidget {
-  final String title;
+  final String? title;
 
   ArticleTitleWidget(this.title);
 
@@ -186,10 +186,12 @@ class ArticleFavouriteWidget extends StatelessWidget {
     return ProviderWidget<FavouriteModel>(
       model: FavouriteModel(
           globalFavouriteModel: Provider.of(context, listen: false)),
-      builder: (_, favouriteModel, __) => GestureDetector(
+      builder: (_, FavouriteModel? favouriteModel, __) => GestureDetector(
           behavior: HitTestBehavior.opaque, //否则padding的区域点击无效
           onTap: () async {
-            if (!favouriteModel.isBusy) {
+            assert(favouriteModel != null);
+
+            if (!favouriteModel!.isBusy) {
               addFavourites(context,
                   article: article, model: favouriteModel, tag: uniqueKey);
             }
@@ -199,14 +201,14 @@ class ArticleFavouriteWidget extends StatelessWidget {
               child: Hero(
                 tag: uniqueKey,
                 child: ScaleAnimatedSwitcher(
-                    child: favouriteModel.isBusy
+                    child: favouriteModel!.isBusy
                         ? SizedBox(
                             height: 24,
                             width: 24,
                             child: CupertinoActivityIndicator(radius: 5))
                         : Consumer<UserModel>(
                       builder: (context,userModel,child)=>Icon(
-                          userModel.hasUser && article.collect
+                          userModel.hasUser && article.collect!
                               ? Icons.favorite
                               : Icons.favorite_border,
                           color: Colors.redAccent[100]),

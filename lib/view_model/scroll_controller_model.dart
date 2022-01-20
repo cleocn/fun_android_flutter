@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class TapToTopModel with ChangeNotifier {
-  ScrollController _scrollController;
+  ScrollController? _scrollController;
 
-  double _height;
+  late double _height;
 
   bool _showTopBtn = false;
 
-  ScrollController get scrollController => _scrollController;
+  ScrollController? get scrollController => _scrollController;
 
   bool get showTopBtn => _showTopBtn;
 
@@ -16,11 +16,11 @@ class TapToTopModel with ChangeNotifier {
   }
 
   init() {
-    _scrollController.addListener(() {
-      if (_scrollController.offset > _height && !_showTopBtn) {
+    _scrollController!.addListener(() {
+      if (_scrollController!.offset > _height && !_showTopBtn) {
         _showTopBtn = true;
         notifyListeners();
-      } else if (_scrollController.offset < _height && _showTopBtn) {
+      } else if (_scrollController!.offset < _height && _showTopBtn) {
         _showTopBtn = false;
         notifyListeners();
       }
@@ -28,7 +28,7 @@ class TapToTopModel with ChangeNotifier {
   }
 
   scrollToTop() {
-    _scrollController.animateTo(0,
+    _scrollController!.animateTo(0,
         duration: Duration(milliseconds: 300), curve: Curves.easeOutCubic);
   }
 }

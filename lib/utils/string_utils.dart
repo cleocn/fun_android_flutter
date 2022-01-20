@@ -9,11 +9,11 @@ class StringUtils {
     return digest.toString();
   }
 
-  static String urlDecoder(String data) {
+  static String? urlDecoder(String? data) {
     return data == null ? null : HtmlUnescape().convert(data);
   }
 
-  static String removeHtmlLabel(String data) {
+  static String? removeHtmlLabel(String? data) {
     return data?.replaceAll(RegExp('<[^>]+>'), '');
   }
 }

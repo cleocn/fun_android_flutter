@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/generated/l10n.dart';
 
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/ui/widget/button_progress_indicator.dart';
-import 'package:fun_android/view_model/register_model.dart';
+import '/provider/provider_widget.dart';
+import '/ui/widget/button_progress_indicator.dart';
+import '/view_model/register_model.dart';
 
-import 'package:fun_android/ui/page/user/login_widget.dart';
+import '/ui/page/user/login_widget.dart';
 
 import 'login_field_widget.dart';
 
@@ -59,20 +59,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                           CrossAxisAlignment.stretch,
                                       children: <Widget>[
                                         LoginTextField(
-                                          label: S.of(context).userName,
+                                          label: S.of(context)!.userName,
                                           icon: Icons.person_outline,
                                           controller: _nameController,
                                           textInputAction: TextInputAction.next,
                                         ),
                                         LoginTextField(
-                                          label: S.of(context).password,
+                                          label: S.of(context)!.password,
                                           icon: Icons.lock_outline,
                                           obscureText: true,
                                           controller: _passwordController,
                                           textInputAction: TextInputAction.next,
                                         ),
                                         LoginTextField(
-                                          label: S.of(context).rePassword,
+                                          label: S.of(context)!.rePassword,
                                           icon: Icons.lock_outline,
                                           obscureText: true,
                                           controller: _rePasswordController,
@@ -80,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           validator: (value) {
                                             return value !=
                                                     _passwordController.text
-                                                ? S.of(context).twoPwdDifferent
+                                                ? S.of(context)!.twoPwdDifferent
                                                 : null;
                                           },
                                         ),
@@ -119,16 +119,16 @@ class RegisterButton extends StatelessWidget {
       child: model.isBusy
           ? ButtonProgressIndicator()
           : Text(
-              S.of(context).signUp,
+              S.of(context)!.signUp,
               style: Theme.of(context)
                   .accentTextTheme
-                  .title
+                  .caption!
                   .copyWith(wordSpacing: 6),
             ),
       onPressed: model.isBusy
           ? null
           : () {
-              if (Form.of(context).validate()) {
+              if (Form.of(context)!.validate()) {
                 model
                     .singUp(nameController.text, passwordController.text,
                         rePasswordController.text)

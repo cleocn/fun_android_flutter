@@ -1,17 +1,17 @@
 
 class User {
 
-  bool admin;
-  List<Object> chapterTops;
-  List<Object> collectIds;
-  String email;
-  String icon;
-  int id;
-  String nickname;
-  String password;
-  String token;
-  int type;
-  String username;
+  bool? admin;
+  List<Object>? chapterTops;
+  List<Object>? collectIds;
+  String? email;
+  String? icon;
+  int? id;
+  String? nickname;
+  String? password;
+  String? token;
+  int? type;
+  String? username;
 
 	User.fromJsonMap(Map<String, dynamic> map): 
 		admin = map["admin"],

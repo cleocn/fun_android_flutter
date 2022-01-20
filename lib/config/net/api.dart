@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/native_imp.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'package:fun_android/utils/platform_utils.dart';
+import '/utils/platform_utils.dart';
 
 export 'package:dio/dio.dart';
 
@@ -30,7 +30,7 @@ abstract class BaseHttp extends DioForNative {
 /// 添加常用Header
 class HeaderInterceptor extends InterceptorsWrapper {
   @override
-  onRequest(RequestOptions options) async {
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     options.connectTimeout = 1000 * 45;
     options.receiveTimeout = 1000 * 45;
 
@@ -41,14 +41,14 @@ class HeaderInterceptor extends InterceptorsWrapper {
       });
     options.headers['version'] = version;
     options.headers['platform'] = Platform.operatingSystem;
-    return options;
+    handler.next(options);
   }
 }
 
 /// 子类需要重写
 abstract class BaseResponseData {
-  int code = 0;
-  String message;
+  int? code = 0;
+  String? message;
   dynamic data;
 
   bool get success;
@@ -64,7 +64,7 @@ abstract class BaseResponseData {
 
 /// 接口的code没有返回为true的异常
 class NotSuccessException implements Exception {
-  String message;
+  String? message;
 
   NotSuccessException.fromRespData(BaseResponseData respData) {
     message = respData.message;

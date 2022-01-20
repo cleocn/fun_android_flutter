@@ -19,14 +19,14 @@ class ImageHelper {
     return "assets/images/" + url;
   }
 
-  static Widget placeHolder({double width, double height}) {
+  static Widget placeHolder({required double width, double? height}) {
     return SizedBox(
         width: width,
         height: height,
         child: CupertinoActivityIndicator(radius: min(10.0, width / 3)));
   }
 
-  static Widget error({double width, double height, double size}) {
+  static Widget error({double? width, double? height, double? size}) {
     return SizedBox(
         width: width,
         height: height,
@@ -37,7 +37,7 @@ class ImageHelper {
   }
 
   static String randomUrl(
-      {int width = 100, int height = 100, Object key = ''}) {
+      {int width = 100, int height = 100, Object? key = ''}) {
     return 'http://placeimg.com/$width/$height/${key.hashCode.toString() + key.toString()}';
   }
 }

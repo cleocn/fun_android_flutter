@@ -2,21 +2,21 @@ import 'package:flutter/material.dart'
     hide SliverAnimatedListState, SliverAnimatedList;
 // import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fun_android/flutter/refresh_animatedlist.dart';
-import 'package:fun_android/generated/l10n.dart';
-import 'package:fun_android/ui/helper/refresh_helper.dart';
-import 'package:fun_android/ui/widget/article_skeleton.dart';
-import 'package:fun_android/ui/widget/skeleton.dart';
+import '/flutter/refresh_animatedlist.dart';
+import '/generated/l10n.dart';
+import '/ui/helper/refresh_helper.dart';
+import '/ui/widget/article_skeleton.dart';
+import '/ui/widget/skeleton.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/ui/widget/article_list_Item.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/view_model/favourite_model.dart';
-import 'package:fun_android/view_model/login_model.dart';
+import '/config/router_manger.dart';
+import '/model/article.dart';
+import '/provider/provider_widget.dart';
+import '/ui/widget/article_list_Item.dart';
+import '/provider/view_state_widget.dart';
+import '/view_model/favourite_model.dart';
+import '/view_model/login_model.dart';
 
 /// 必须为StatefulWidget,才能根据[GlobalKey]取出[currentState].
 /// 否则从详情页返回后,无法移除没有收藏的item
@@ -33,7 +33,7 @@ class _FavouriteListPageState extends State<FavouriteListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(S.of(context).myFavourites),
+        title: Text(S.of(context)!.myFavourites),
       ),
       body: ProviderWidget<FavouriteListModel>(
         model: FavouriteListModel(loginModel: LoginModel(Provider.of(context))),
@@ -48,16 +48,16 @@ class _FavouriteListPageState extends State<FavouriteListPage> {
           } else if (model.isEmpty) {
             return ViewStateEmptyWidget(onPressed: model.initData);
           } else if (model.isError) {
-            if (model.viewStateError.isUnauthorized) {
+            if (model.viewStateError!.isUnauthorized) {
               return ViewStateUnAuthWidget(onPressed: () async {
                 var success =
                     await Navigator.of(context).pushNamed(RouteName.login);
                 // 登录成功,获取数据,刷新页面
-                if (success ?? false) {
+                if (success as bool? ?? false) {
                   model.initData();
                 }
               });
-            } else if (model.list.isEmpty) {
+            } else if (model.list!.isEmpty) {
               // 只有在页面上没有数据的时候才显示错误widget
               return ViewStateErrorWidget(
                   error: model.viewStateError, onPressed: model.initData);
@@ -69,35 +69,39 @@ class _FavouriteListPageState extends State<FavouriteListPage> {
               footer: RefresherFooter(),
               onRefresh: () async {
                 await model.refresh();
-                listKey.currentState.refresh(model.list.length);
+                listKey.currentState!.refresh(model.list!.length);
               },
               onLoading: () async {
                 await model.loadMore();
-                listKey.currentState.refresh(model.list.length);
+                listKey.currentState!.refresh(model.list!.length);
               },
               enablePullUp: true,
               child: CustomScrollView(slivers: <Widget>[
                 SliverAnimatedList(
                     key: listKey,
-                    initialItemCount: model.list.length,
+                    initialItemCount: model.list!.length,
                     itemBuilder: (context, index, animation) {
-                      Article item = model.list[index];
+                      Article item = model.list![index];
                       return Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        secondaryActions: <Widget>[
-                          IconSlideAction(
-                            caption: S.of(context).collectionRemove,
-                            color: Colors.redAccent,
-                            icon: Icons.delete,
-                            onTap: () {
-                              FavouriteModel(
-                                      globalFavouriteModel:
-                                          Provider.of(context, listen: false))
-                                  .collect(item);
-                              removeItem(model.list, index);
-                            },
-                          )
-                        ],
+                        // The end action pane is the one at the right or the bottom side.
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                             SlidableAction(
+                              // An action can be bigger than the others.
+                              flex: 2,
+                              onPressed: (_) {
+                                FavouriteModel(globalFavouriteModel: Provider.of(context, listen: false))
+                                    .collect(item);
+                                removeItem(model.list!, index);
+                              },
+                              // backgroundColor: Color(0xFF7BC043),
+                              foregroundColor: Colors.redAccent,
+                              icon: Icons.delete,
+                              label: S.of(context)!.collectionRemove,
+                            ),
+                          ],
+                        ),
                         child: SizeTransition(
                             axis: Axis.vertical,
                             sizeFactor: animation,
@@ -108,8 +112,8 @@ class _FavouriteListPageState extends State<FavouriteListPage> {
                                 await Navigator.of(context).pushNamed(
                                     RouteName.articleDetail,
                                     arguments: item);
-                                if (!(item?.collect ?? true)) {
-                                  removeItem(model.list, index);
+                                if (!(item.collect ?? true)) {
+                                  removeItem(model.list!, index);
                                 }
                               },
                             )),
@@ -124,7 +128,7 @@ class _FavouriteListPageState extends State<FavouriteListPage> {
   /// 移除取消收藏的item
   removeItem(List list, int index) {
     var removeItem = list.removeAt(index);
-    listKey.currentState.removeItem(
+    listKey.currentState!.removeItem(
         index,
         (context, animation) => SizeTransition(
             axis: Axis.vertical,

@@ -1,4 +1,4 @@
-package cn.phoenixsky.wan_android;
+package cn.zbjst.fluyzt;
 
 import io.flutter.embedding.android.FlutterActivity;
 

@@ -12,7 +12,7 @@ const double SCREEN_WIDTH = 414;
 
 class InnerWidgetsFlutterBinding extends WidgetsFlutterBinding {
 
-  static WidgetsBinding ensureInitialized() {
+  static WidgetsBinding? ensureInitialized() {
     if (WidgetsBinding.instance == null) InnerWidgetsFlutterBinding();
     return WidgetsBinding.instance;
   }
@@ -69,11 +69,11 @@ class InnerWidgetsFlutterBinding extends WidgetsFlutterBinding {
       _handlePointerEvent(_pendingPointerEvents.removeFirst());
   }
 
-  final Map<int, HitTestResult> _hitTests = <int, HitTestResult>{};
+  final Map<int, HitTestResult?> _hitTests = <int, HitTestResult?>{};
 
   void _handlePointerEvent(PointerEvent event) {
     assert(!locked);
-    HitTestResult result;
+    HitTestResult? result;
     if (event is PointerDownEvent) {
       assert(!_hitTests.containsKey(event.pointer));
       result = HitTestResult();

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/ui/helper/refresh_helper.dart';
-import 'package:fun_android/ui/widget/skeleton.dart';
-import 'package:fun_android/view_model/coin_model.dart';
-import 'package:fun_android/view_model/user_model.dart';
+import '/provider/provider_widget.dart';
+import '/provider/view_state_widget.dart';
+import '/ui/helper/refresh_helper.dart';
+import '/ui/widget/skeleton.dart';
+import '/view_model/coin_model.dart';
+import '/view_model/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -13,7 +13,7 @@ class CoinRankingListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
-    String selfName = userModel.user.username.replaceRange(1, 3, '**');
+    String selfName = userModel.user!.username!.replaceRange(1, 3, '**');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -28,7 +28,7 @@ class CoinRankingListPage extends StatelessWidget {
               length: 11,
               builder: (context, index) => CoinRankingListItemSkeleton(),
             );
-          } else if (model.isError && model.list.isEmpty) {
+          } else if (model.isError && model.list!.isEmpty) {
             return ViewStateErrorWidget(
                 error: model.viewStateError, onPressed: model.initData);
           } else if (model.isEmpty) {
@@ -42,7 +42,7 @@ class CoinRankingListPage extends StatelessWidget {
               onLoading: model.loadMore,
               enablePullUp: true,
               child: ListView.separated(
-                  itemCount: model.list.length,
+                  itemCount: model.list!.length,
                   separatorBuilder: (context, index) => Divider(
                         indent: 10,
                         endIndent: 10,
@@ -50,7 +50,7 @@ class CoinRankingListPage extends StatelessWidget {
                       ),
                   itemBuilder: (context, index) {
 //                    {"coinCount": 448,"username": "S**24n"},
-                    Map item = model.list[index];
+                    Map item = model.list![index];
                     String userName = item['username'];
                     String coinCount = item['coinCount'].toString();
                     return ListTile(

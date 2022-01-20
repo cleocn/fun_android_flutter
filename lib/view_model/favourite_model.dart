@@ -1,29 +1,31 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/provider/view_state_refresh_list_model.dart';
-import 'package:fun_android/provider/view_state_model.dart';
-import 'package:fun_android/service/wan_android_repository.dart';
+import '/model/article.dart';
+import '/provider/view_state_refresh_list_model.dart';
+import '/provider/view_state_model.dart';
+import '/service/wan_android_repository.dart';
 
 import 'login_model.dart';
 
 /// 我的收藏列表
 class FavouriteListModel extends ViewStateRefreshListModel<Article> {
-  LoginModel loginModel;
+  LoginModel? loginModel;
 
   FavouriteListModel({this.loginModel});
 
   @override
-  void onError(ViewStateError viewStateError) {
+  void onError(ViewStateError? viewStateError) {
     super.onError(viewStateError);
-    if (viewStateError.isUnauthorized) {
-      loginModel.logout();
+    if (viewStateError!.isUnauthorized) {
+      loginModel!.logout();
     }
   }
 
 
   @override
-  Future<List<Article>> loadData({int pageNum}) async {
-    return await WanAndroidRepository.fetchCollectList(pageNum);
+  Future<List<Article>?> loadData({int? pageNum}) async {
+    return await (WanAndroidRepository.fetchCollectList(pageNum) as FutureOr<List<Article>?>);
   }
 }
 
@@ -31,7 +33,7 @@ class FavouriteListModel extends ViewStateRefreshListModel<Article> {
 class FavouriteModel extends ViewStateModel {
   GlobalFavouriteStateModel globalFavouriteModel;
 
-  FavouriteModel({@required this.globalFavouriteModel});
+  FavouriteModel({required this.globalFavouriteModel});
 
   collect(Article article) async {
     setBusy();
@@ -42,7 +44,7 @@ class FavouriteModel extends ViewStateModel {
             id: article.id, originId: article.originId);
         globalFavouriteModel.removeFavourite(article.originId);
       } else {
-        if (article.collect) {
+        if (article.collect!) {
           await WanAndroidRepository.unCollect(article.id);
           globalFavouriteModel.removeFavourite(article.id);
         } else {
@@ -66,7 +68,7 @@ class GlobalFavouriteStateModel extends ChangeNotifier {
   /// [key]为articleId,[value]为bool类型,代表是否收藏
   ///
   /// 设置static的目的是,列表更新时,刷新该map中的值
-  static final Map<int, bool> _map = Map();
+  static final Map<int?, bool?> _map = Map();
 
   /// 列表数据刷新后,同步刷新该map数据
   ///
@@ -80,12 +82,12 @@ class GlobalFavouriteStateModel extends ChangeNotifier {
     });
   }
 
-  addFavourite(int id) {
+  addFavourite(int? id) {
     _map[id] = true;
     notifyListeners();
   }
 
-  removeFavourite(int id) {
+  removeFavourite(int? id) {
     _map[id] = false;
     notifyListeners();
   }
@@ -101,7 +103,7 @@ class GlobalFavouriteStateModel extends ChangeNotifier {
     return _map.containsKey(id);
   }
 
-  operator [](int id) {
+  operator [](int? id) {
     return _map[id];
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/model/coin_record.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/ui/helper/refresh_helper.dart';
-import 'package:fun_android/ui/widget/skeleton.dart';
-import 'package:fun_android/view_model/coin_model.dart';
+import '/config/router_manger.dart';
+import '/model/coin_record.dart';
+import '/provider/provider_widget.dart';
+import '/provider/view_state_widget.dart';
+import '/ui/helper/refresh_helper.dart';
+import '/ui/widget/skeleton.dart';
+import '/view_model/coin_model.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 /// 积分记录
@@ -37,7 +37,7 @@ class CoinRecordListPage extends StatelessWidget {
               length: 11,
               builder: (context, index) => CoinRecordItemSkeleton(),
             );
-          } else if (model.isError && model.list.isEmpty) {
+          } else if (model.isError && model.list!.isEmpty) {
             return ViewStateErrorWidget(
                 error: model.viewStateError, onPressed: model.initData);
           } else if (model.isEmpty) {
@@ -51,7 +51,7 @@ class CoinRecordListPage extends StatelessWidget {
               onLoading: model.loadMore,
               enablePullUp: true,
               child: ListView.separated(
-                  itemCount: model.list.length,
+                  itemCount: model.list!.length,
                   separatorBuilder: (context, index) => Divider(
                         indent: 10,
                         endIndent: 10,
@@ -60,9 +60,9 @@ class CoinRecordListPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     // desc": "2019-08-28 10:09:15 签到,积分：10 + 12"
                     // desc 提出 bug #issues/174 ,积分+10
-                    CoinRecord item = model. list[index];
+                    CoinRecord item = model. list![index];
                     String dateTime =
-                        DateTime.fromMillisecondsSinceEpoch(item.date)
+                        DateTime.fromMillisecondsSinceEpoch(item.date!)
                             .toString()
                             .substring(0, 19);
                     String title;
@@ -70,10 +70,10 @@ class CoinRecordListPage extends StatelessWidget {
                     if (item.type == 1) {
                       //签到
                       title = '签到';
-                      coin = item.desc.substring(item.desc.indexOf('：') + 1);
+                      coin = item.desc!.substring(item.desc!.indexOf('：') + 1);
                     } else if (item.type == 99) {
                       //修复bug
-                      title = item.desc.substring(0,item.desc.indexOf(','));
+                      title = item.desc!.substring(0,item.desc!.indexOf(','));
                       coin= item.coinCount.toString();
                     }else{
                       title ='其他类型';

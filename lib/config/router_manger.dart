@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fun_android/config/storage_manager.dart';
-import 'package:fun_android/model/article.dart';
-import 'package:fun_android/model/tree.dart';
-import 'package:fun_android/ui/page/coin/coin_ranking_list_page.dart';
-import 'package:fun_android/ui/page/coin/coin_record_list_page.dart';
-import 'package:fun_android/ui/page/favourite_list_page.dart';
-import 'package:fun_android/ui/page/article/article_list_page.dart';
-import 'package:fun_android/ui/page/setting_page.dart';
-import 'package:fun_android/ui/page/tab/home_second_floor_page.dart';
-import 'package:fun_android/ui/page/user/login_page.dart';
-import 'package:fun_android/ui/page/splash.dart';
-import 'package:fun_android/ui/page/tab/tab_navigator.dart';
-import 'package:fun_android/ui/page/article/article_detail_page.dart';
-import 'package:fun_android/ui/page/article/article_detail_plugin_page.dart';
-import 'package:fun_android/ui/page/user/register_page.dart';
-import 'package:fun_android/ui/widget/page_route_anim.dart';
-import 'package:fun_android/view_model/setting_model.dart';
+import '/config/storage_manager.dart';
+import '/model/article.dart';
+import '/model/tree.dart';
+import '/ui/page/coin/coin_ranking_list_page.dart';
+import '/ui/page/coin/coin_record_list_page.dart';
+import '/ui/page/favourite_list_page.dart';
+import '/ui/page/article/article_list_page.dart';
+import '/ui/page/setting_page.dart';
+import '/ui/page/tab/home_second_floor_page.dart';
+import '/ui/page/user/login_page.dart';
+import '/ui/page/splash.dart';
+import '/ui/page/tab/tab_navigator.dart';
+import '/ui/page/article/article_detail_page.dart';
+import '/ui/page/article/article_detail_plugin_page.dart';
+import '/ui/page/user/register_page.dart';
+import '/ui/widget/page_route_anim.dart';
+import '/view_model/setting_model.dart';
+
 
 class RouteName {
   static const String splash = 'splash';
@@ -47,7 +48,7 @@ class MyRouter {
       case RouteName.register:
         return CupertinoPageRoute(builder: (_) => RegisterPage());
       case RouteName.articleDetail:
-        var article = settings.arguments as Article;
+        var article = settings.arguments as Article?;
         return CupertinoPageRoute(builder: (_) {
           // 根据配置调用页面
           return StorageManager.sharedPreferences.getBool(kUseWebViewPlugin) ??
@@ -89,16 +90,16 @@ class PopRoute extends PopupRoute {
   final Duration _duration = Duration(milliseconds: 300);
   Widget child;
 
-  PopRoute({@required this.child});
+  PopRoute({required this.child});
 
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
   bool get barrierDismissible => true;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,

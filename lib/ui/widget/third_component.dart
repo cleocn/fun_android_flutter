@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fun_android/generated/l10n.dart';
+import '/generated/l10n.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:fun_android/config/resource_mananger.dart';
+import '/config/resource_mananger.dart';
 
 class ThirdLogin extends StatelessWidget {
   @override
@@ -19,7 +19,7 @@ class ThirdLogin extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(S.of(context).signIn3thd,
+              child: Text(S.of(context)!.signIn3thd,
                   style: TextStyle(color: theme.hintColor)),
             ),
             Container(

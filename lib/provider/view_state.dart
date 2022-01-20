@@ -15,16 +15,16 @@ enum ViewStateErrorType {
 }
 
 class ViewStateError {
-  ViewStateErrorType _errorType;
-  String message;
-  String errorMessage;
+  ViewStateErrorType? _errorType;
+  String? message;
+  String? errorMessage;
 
   ViewStateError(this._errorType, {this.message, this.errorMessage}) {
     _errorType ??= ViewStateErrorType.defaultError;
     message ??= errorMessage;
   }
 
-  ViewStateErrorType get errorType => _errorType;
+  ViewStateErrorType? get errorType => _errorType;
 
   /// 以下变量是为了代码书写方便,加入的get方法.严格意义上讲,并不严谨
   get isDefaultError => _errorType == ViewStateErrorType.defaultError;

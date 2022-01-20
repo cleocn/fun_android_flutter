@@ -7,7 +7,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:fun_android/config/storage_manager.dart';
+import '/config/storage_manager.dart';
 
 import 'config/provider_manager.dart';
 import 'config/router_manger.dart';

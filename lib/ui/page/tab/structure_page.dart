@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:fun_android/config/router_manger.dart';
-import 'package:fun_android/model/navigation_site.dart';
-import 'package:fun_android/model/tree.dart';
-import 'package:fun_android/provider/provider_widget.dart';
-import 'package:fun_android/provider/view_state_widget.dart';
-import 'package:fun_android/view_model/structure_model.dart';
+import '/config/router_manger.dart';
+import '/model/navigation_site.dart';
+import '/model/tree.dart';
+import '/provider/provider_widget.dart';
+import '/provider/view_state_widget.dart';
+import '/view_model/structure_model.dart';
 
 /// 体系
 class StructurePage extends StatefulWidget {
@@ -64,15 +64,15 @@ class _StructureCategoryListState extends State<StructureCategoryList>
         builder: (context, model, child) {
           if (model.isBusy) {
             return ViewStateBusyWidget();
-          } else if (model.isError && model.list.isEmpty) {
+          } else if (model.isError && model.list!.isEmpty) {
             return ViewStateErrorWidget(error: model.viewStateError, onPressed: model.initData);
           }
           return Scrollbar(
             child: ListView.builder(
                 padding: EdgeInsets.all(15),
-                itemCount: model.list.length,
+                itemCount: model.list!.length,
                 itemBuilder: (context, index) {
-                  Tree item = model.list[index];
+                  Tree item = model.list![index];
                   return StructureCategoryWidget(item);
                 }),
           );
@@ -93,8 +93,8 @@ class StructureCategoryWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            tree.name,
-            style: Theme.of(context).textTheme.subtitle,
+            tree.name!,
+            style: Theme.of(context).textTheme.subtitle1,
           ),
           Wrap(
               spacing: 10,
@@ -106,7 +106,7 @@ class StructureCategoryWidget extends StatelessWidget {
                               arguments: [tree, index]);
                         },
                         label: Text(
-                          tree.children[index].name,
+                          tree.children[index].name!,
                           maxLines: 1,
                         ),
                       )))
@@ -146,9 +146,9 @@ class _NavigationSiteCategoryListState extends State<NavigationSiteCategoryList>
           return Scrollbar(
             child: ListView.builder(
                 padding: EdgeInsets.all(15),
-                itemCount: model.list.length,
+                itemCount: model.list!.length,
                 itemBuilder: (context, index) {
-                  NavigationSite item = model.list[index];
+                  NavigationSite item = model.list![index];
                   return NavigationSiteCategoryWidget(item);
                 }),
           );
@@ -169,21 +169,21 @@ class NavigationSiteCategoryWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            site.name,
-            style: Theme.of(context).textTheme.subtitle,
+            site.name!,
+            style: Theme.of(context).textTheme.subtitle1,
           ),
           Wrap(
               spacing: 10,
               children: List.generate(
-                  site.articles.length,
+                  site.articles!.length,
                   (index) => ActionChip(
                         onPressed: () {
                           Navigator.of(context).pushNamed(
                               RouteName.articleDetail,
-                              arguments: site.articles[index]);
+                              arguments: site.articles![index]);
                         },
                         label: Text(
-                          site.articles[index].title,
+                          site.articles![index].title!,
                           maxLines: 1,
                         ),
                       )))
